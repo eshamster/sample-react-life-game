@@ -11,3 +11,34 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.cell {
+    background: #fff;
+    border: 1px solid #888;
+    margin-right: -1px;
+    margin-top: -1px;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    float: left;
+}
+
+.cell-live {
+    background: #000;
+}
+
+.cell-dead {
+    background: #fff;
+}
+
+.board {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.board-row:after {
+    clear: both;
+    content: "";
+    display: table;
+}
