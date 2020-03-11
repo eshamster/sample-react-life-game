@@ -1,5 +1,5 @@
-import React from 'react';
-import Cell from './Cell';
+import React from 'react'
+import Cell from './Cell'
 
 export default function Board(props) {
   let cells = Array(props.cellY)

@@ -8,7 +8,7 @@ function App() {
       cellX={30}
       cellY={25}
       countsToBorn={[3]}
-      countsToLive={[2,3]}
+      countsToKeep={[2,3]}
     />
   );
 }
