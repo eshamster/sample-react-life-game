@@ -1,6 +1,7 @@
 import React from 'react'
 import Board from './Board'
 import StepButton from './StepButton'
+import PlayButton from './PlayButton'
 
 export default class Game extends React.Component {
   constructor(props) {
@@ -13,6 +14,9 @@ export default class Game extends React.Component {
 
     this.state = {
       cells: cells,
+      isPlaying: false,
+      updateIntv: 100, /* ms */
+      intvId: undefined,
     }
   }
 
@@ -59,6 +63,35 @@ export default class Game extends React.Component {
     this.setState({cells: nextCells})
   }
 
+  play() {
+    if (this.state.isPlaying) {
+      return
+    }
+    this.setState({
+      isPlaying: true,
+      intvId: setInterval(() => this.update(), this.state.updateIntv)
+    })
+  }
+
+  stop() {
+    if (!this.state.isPlaying) {
+      return
+    }
+    clearInterval(this.state.intvId)
+    this.setState({
+      isPlaying: false,
+      intvId: undefined,
+    })
+  }
+
+  togglePlaying() {
+    if (this.state.isPlaying) {
+      this.stop()
+    } else {
+      this.play()
+    }
+  }
+
   render() {
     return (
       <div>
@@ -69,6 +102,10 @@ export default class Game extends React.Component {
         />
         <StepButton
           onClick={() => this.update()}
+        />
+        <PlayButton
+          isPlaying={this.state.isPlaying}
+          onClick={() => this.togglePlaying()}
         />
       </div>
     )

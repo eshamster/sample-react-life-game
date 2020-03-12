@@ -1,12 +1,12 @@
 import React from 'react'
 
-export default function StepButton(props) {
+export default function PlayButton(props) {
   return (
     <button
-      className="step-btn"
+      className="play-btn"
       onClick={() => props.onClick()}
     >
-      Next Step
+      {props.isPlaying ? 'Stop' : 'Play'}
     </button>
   )
 }
