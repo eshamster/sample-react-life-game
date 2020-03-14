@@ -2,6 +2,7 @@ import React from 'react'
 import Board from './Board'
 import StepButton from './StepButton'
 import PlayButton from './PlayButton'
+import ClearButton from './ClearButton'
 import NumberSelector from './NumbersSelector'
 
 export default class Game extends React.Component {
@@ -99,7 +100,7 @@ export default class Game extends React.Component {
     }
   }
 
-  // --- interactively change cell --- //
+  // --- change cell state --- //
 
   toggleOneCellState(index) {
     const cells = this.state.cells.slice()
@@ -114,7 +115,13 @@ export default class Game extends React.Component {
     })
   }
 
-  // --- set conditions --- //
+  killAllCells() {
+    this.setState({
+      cells: Array(this.calcCellNum()).fill(false)
+    })
+  }
+
+  // --- set living conditions --- //
 
   toggleNumberSelect(num, arr) {
     if (num < 0 || num > 8) {
@@ -128,6 +135,12 @@ export default class Game extends React.Component {
       res.push(num)
     }
     return res
+  }
+
+  // --- utils --- //
+
+  calcCellNum() {
+    return this.props.cellX * this.props.cellY
   }
 
   // --- render --- //
@@ -147,6 +160,9 @@ export default class Game extends React.Component {
         <PlayButton
           isPlaying={this.state.isPlaying}
           onClick={() => this.togglePlaying()}
+        />
+        <ClearButton
+          onClick={() => this.killAllCells()}
         />
         <ul>
           <li>
