@@ -2,11 +2,11 @@ import React from 'react'
 
 export default function PlayButton(props) {
   return (
-    <button
-      className="play-btn"
-      onClick={() => props.onClick()}
-    >
-      {props.isPlaying ? 'Stop' : 'Play'}
-    </button>
+    <div className="play-btn-wrap">
+      <button
+        className={"play-btn " + (props.isPlaying ? "play-btn-play" : "play-btn-stop")}
+        onClick={() => props.onClick()}
+      />
+    </div>
   )
 }

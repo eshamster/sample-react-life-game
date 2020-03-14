@@ -158,21 +158,25 @@ export default class Game extends React.Component {
           cellsState={this.state.cells}
           onClickCell={index => this.toggleOneCellState(index)}
         />
-        <StepButton
-          onClick={() => this.update()}
-        />
-        <PlayButton
-          isPlaying={this.state.isPlaying}
-          onClick={() => this.togglePlaying()}
-        />
-        <ClearButton
-          onClick={() => this.killAllCells()}
-        />
-        <ResetButton
-          onClick={() => this.setState({
-            cells: this.createCellsStateRandomly()
-          })}
-        />
+        <div>
+          <PlayButton
+            isPlaying={this.state.isPlaying}
+            onClick={() => this.togglePlaying()}
+          />
+        </div>
+        <div>
+          <StepButton
+            onClick={() => this.update()}
+          />
+          <ClearButton
+            onClick={() => this.killAllCells()}
+          />
+          <ResetButton
+            onClick={() => this.setState({
+              cells: this.createCellsStateRandomly()
+            })}
+          />
+        </div>
         <ul>
           <li>
             BORN: Required around cells to born
