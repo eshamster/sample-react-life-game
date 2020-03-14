@@ -4,8 +4,8 @@ function NumButton(props) {
   return (
     <button
       className={props.isSelected ?
-                 "ccs-btn ccs-btn-selected" :
-                 "ccs-btn ccs-btn-not-selected"}
+                 "ns-btn ns-btn-selected" :
+                 "ns-btn ns-btn-not-selected"}
       onClick={() => props.onClick()}>
       {props.value}
     </ button>

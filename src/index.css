@@ -42,8 +42,13 @@ code {
     display: table;
 }
 
-/* --- CCS: CellCountSetter --- */
-.ccs-btn {
+/* --- Play/Stop button --- */
+
+
+
+/* --- NS: NumberSelector --- */
+
+.ns-btn {
     border: 1px solid #888;
     margin-right: -1px;
     margin-top: -1px;
@@ -54,13 +59,13 @@ code {
     text-align: center;
 }
 
-.ccs-btn-selected {
+.ns-btn-selected {
     background: #000;
     font-weight: bold;
     color: #fff;
 }
 
-.ccs-btn-not-selected {
+.ns-btn-not-selected {
     background: #fff;
     color: #bbb;
 }
