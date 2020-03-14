@@ -99,6 +99,23 @@ export default class Game extends React.Component {
     }
   }
 
+  // --- interactively change cell --- //
+
+  toggleOneCellState(index) {
+    const cells = this.state.cells.slice()
+    if (index < 0 || index >= cells.length) {
+      throw `Index should be in range [0, ${cells.length}], but got ${index}`
+    }
+
+    cells[index] = !cells[index]
+
+    this.setState({
+      cells: cells,
+    })
+  }
+
+  // --- set conditions --- //
+
   toggleNumberSelect(num, arr) {
     if (num < 0 || num > 8) {
       throw "Selection number should be [0, 8]"
@@ -122,6 +139,7 @@ export default class Game extends React.Component {
           cellX={this.props.cellX}
           cellY={this.props.cellY}
           cellsState={this.state.cells}
+          onClickCell={index => this.toggleOneCellState(index)}
         />
         <StepButton
           onClick={() => this.update()}

@@ -10,7 +10,10 @@ export default function Board(props) {
     for (let x = 0; x < props.cellX; x++) {
       const index = y * props.cellX + x
       row[x] = (
-        <Cell isLive={cellsState[index]} />
+        <Cell
+          isLive={cellsState[index]}
+          onClick={() => props.onClickCell(index)}
+        />
       )
     }
 
