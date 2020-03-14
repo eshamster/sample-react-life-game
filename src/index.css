@@ -13,13 +13,12 @@ code {
 }
 
 .cell {
-    background: #fff;
     border: 1px solid #888;
     margin-right: -1px;
     margin-top: -1px;
     padding: 0;
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     float: left;
 }
 
@@ -41,4 +40,27 @@ code {
     clear: both;
     content: "";
     display: table;
+}
+
+/* --- CCS: CellCountSetter --- */
+.ccs-btn {
+    border: 1px solid #888;
+    margin-right: -1px;
+    margin-top: -1px;
+    padding: 0;
+    width: 28px;
+    height: 28px;
+    font-size:22px;
+    text-align: center;
+}
+
+.ccs-btn-selected {
+    background: #000;
+    font-weight: bold;
+    color: #fff;
+}
+
+.ccs-btn-not-selected {
+    background: #fff;
+    color: #bbb;
 }

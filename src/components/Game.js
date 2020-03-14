@@ -2,6 +2,7 @@ import React from 'react'
 import Board from './Board'
 import StepButton from './StepButton'
 import PlayButton from './PlayButton'
+import NumberSelector from './NumbersSelector'
 
 export default class Game extends React.Component {
   constructor(props) {
@@ -17,8 +18,12 @@ export default class Game extends React.Component {
       isPlaying: false,
       updateIntv: 100, /* ms */
       intvId: undefined,
+      countsToBorn: [3],
+      countsToKeep: [2,3],
     }
   }
+
+  // --- updating --- //
 
   countAroundLivings(x, y, cells) {
     const cellX = this.props.cellX
@@ -42,8 +47,8 @@ export default class Game extends React.Component {
     const count = this.countAroundLivings(x, y, cells)
     const countsToLive =
           (cells[y * this.props.cellX + x]) ?
-          this.props.countsToKeep :
-          this.props.countsToBorn
+          this.state.countsToKeep :
+          this.state.countsToBorn
 
     return countsToLive.includes(count)
   }
@@ -62,6 +67,8 @@ export default class Game extends React.Component {
 
     this.setState({cells: nextCells})
   }
+
+  // --- playing --- //
 
   play() {
     if (this.state.isPlaying) {
@@ -92,6 +99,22 @@ export default class Game extends React.Component {
     }
   }
 
+  toggleNumberSelect(num, arr) {
+    if (num < 0 || num > 8) {
+      throw "Selection number should be [0, 8]"
+    }
+
+    let res = arr.slice()
+    if (res.includes(num)) {
+      return arr.filter(n => {return n !== num})
+    } else {
+      res.push(num)
+    }
+    return res
+  }
+
+  // --- render --- //
+
   render() {
     return (
       <div>
@@ -107,6 +130,32 @@ export default class Game extends React.Component {
           isPlaying={this.state.isPlaying}
           onClick={() => this.togglePlaying()}
         />
+        <ul>
+          <li>
+            BORN: Required around cells to born
+            <NumberSelector
+              maxNum={8}
+              selectedValues={this.state.countsToBorn}
+              onClickNum={(n) => {
+                this.setState({
+                  countsToBorn: this.toggleNumberSelect(n, this.state.countsToBorn),
+                })
+              }}
+            />
+          </li>
+          <li>
+            KEEP: Required around cells to keep living
+            <NumberSelector
+              maxNum={8}
+              selectedValues={this.state.countsToKeep}
+              onClickNum={(n) => {
+                this.setState({
+                  countsToKeep: this.toggleNumberSelect(n, this.state.countsToKeep),
+                })
+              }}
+            />
+          </li>
+        </ul>
       </div>
     )
   }
