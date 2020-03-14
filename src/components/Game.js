@@ -3,19 +3,15 @@ import Board from './Board'
 import StepButton from './StepButton'
 import PlayButton from './PlayButton'
 import ClearButton from './ClearButton'
+import ResetButton from './ResetButton'
 import NumberSelector from './NumbersSelector'
 
 export default class Game extends React.Component {
   constructor(props) {
     super(props)
 
-    const cells = Array(props.cellX * props.cellY)
-    for (let i = 0; i < cells.length; i++) {
-      cells[i] = (Math.random() > 0.5) ? true : false
-    }
-
     this.state = {
-      cells: cells,
+      cells: this.createCellsStateRandomly(),
       isPlaying: false,
       updateIntv: 100, /* ms */
       intvId: undefined,
@@ -121,6 +117,14 @@ export default class Game extends React.Component {
     })
   }
 
+  createCellsStateRandomly() {
+    const cells = Array(this.calcCellNum())
+    for (let i = 0; i < cells.length; i++) {
+      cells[i] = Math.random() > 0.5
+    }
+    return cells
+  }
+
   // --- set living conditions --- //
 
   toggleNumberSelect(num, arr) {
@@ -163,6 +167,11 @@ export default class Game extends React.Component {
         />
         <ClearButton
           onClick={() => this.killAllCells()}
+        />
+        <ResetButton
+          onClick={() => this.setState({
+            cells: this.createCellsStateRandomly()
+          })}
         />
         <ul>
           <li>

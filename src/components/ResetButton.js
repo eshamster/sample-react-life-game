@@ -1,12 +1,12 @@
 import React from 'react'
 
-export default function ClearButton(props) {
+export default function ResetButton(props) {
   return (
     <button
-      className="clear-btn"
+      className="reset-btn"
       onClick={() => props.onClick()}
     >
-      Clear
+      Reset
     </button>
   )
 }
