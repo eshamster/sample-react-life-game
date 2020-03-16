@@ -101,7 +101,7 @@ export default class Game extends React.Component {
   toggleOneCellState(index) {
     const cells = this.state.cells.slice()
     if (index < 0 || index >= cells.length) {
-      throw `Index should be in range [0, ${cells.length}], but got ${index}`
+      throw new Error(`Index should be in range [0, ${cells.length}], but got ${index}`)
     }
 
     cells[index] = !cells[index]
@@ -129,7 +129,7 @@ export default class Game extends React.Component {
 
   toggleNumberSelect(num, arr) {
     if (num < 0 || num > 8) {
-      throw "Selection number should be [0, 8]"
+      throw new Error("Selection number should be [0, 8]")
     }
 
     let res = arr.slice()
