@@ -4,10 +4,7 @@ import Game from './components/Game';
 
 function App() {
   return (
-    <Game
-      cellX={30}
-      cellY={25}
-    />
+    <Game />
   );
 }
 

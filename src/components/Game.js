@@ -4,14 +4,20 @@ import StepButton from './StepButton'
 import PlayButton from './PlayButton'
 import ClearButton from './ClearButton'
 import ResetButton from './ResetButton'
+import NumberSetter from './NumberSetter'
 import NumberSelector from './NumbersSelector'
 
 export default class Game extends React.Component {
   constructor(props) {
     super(props)
 
+    const cellX = 30
+    const cellY = 25
+
     this.state = {
-      cells: this.createCellsStateRandomly(),
+      cellX: cellX,
+      cellY: cellY,
+      cells: this.createCellsStateRandomly(cellX, cellY),
       isPlaying: false,
       updateIntv: 100, /* ms */
       intvId: undefined,
@@ -23,8 +29,8 @@ export default class Game extends React.Component {
   // --- updating --- //
 
   countAroundLivings(x, y, cells) {
-    const cellX = this.props.cellX
-    const cellY = this.props.cellY
+    const cellX = this.state.cellX
+    const cellY = this.state.cellY
 
     const left = (x > 0) ? x - 1 : cellX - 1
     const up   = (y > 0) ? y - 1 : cellY - 1
@@ -43,7 +49,7 @@ export default class Game extends React.Component {
   isLiveInNext(x, y, cells) {
     const count = this.countAroundLivings(x, y, cells)
     const countsToLive =
-          (cells[y * this.props.cellX + x]) ?
+          (cells[y * this.state.cellX + x]) ?
           this.state.countsToKeep :
           this.state.countsToBorn
 
@@ -51,8 +57,8 @@ export default class Game extends React.Component {
   }
 
   update() {
-    const cellX = this.props.cellX
-    const cellY = this.props.cellY
+    const cellX = this.state.cellX
+    const cellY = this.state.cellY
     const nextCells = Array(cellX * cellY)
 
     for (let y = 0; y < cellY; y++) {
@@ -117,8 +123,8 @@ export default class Game extends React.Component {
     })
   }
 
-  createCellsStateRandomly() {
-    const cells = Array(this.calcCellNum())
+  createCellsStateRandomly(cellX, cellY) {
+    const cells = Array(cellX * cellY)
     for (let i = 0; i < cells.length; i++) {
       cells[i] = Math.random() > 0.5
     }
@@ -141,10 +147,43 @@ export default class Game extends React.Component {
     return res
   }
 
+  // --- cellSize --- //
+
+  updateCellSize(cellX, cellY) {
+    const prevX = this.state.cellX
+    const prevY = this.state.cellY
+    const cells = Array(cellX * cellY).fill(false)
+
+    if (cellX < 1) {
+      cellX = 1
+    }
+    if (cellY < 1) {
+      cellY = 1
+    }
+
+    for (let y = 0; y < cellY; y++) {
+      if (y > prevY - 1) {
+        break
+      }
+      for (let x = 0; x < cellX; x++) {
+        if (x > prevX - 1) {
+          break
+        }
+        cells[y * cellX + x] = this.state.cells[y * prevX + x]
+      }
+    }
+
+    this.setState({
+      cellX: cellX,
+      cellY: cellY,
+      cells: cells
+    })
+  }
+
   // --- utils --- //
 
   calcCellNum() {
-    return this.props.cellX * this.props.cellY
+    return this.state.cellX * this.state.cellY
   }
 
   // --- render --- //
@@ -152,9 +191,21 @@ export default class Game extends React.Component {
   render() {
     return (
       <div>
+        <div className="wss">
+          <div>width</div>
+          <NumberSetter
+            value={this.state.cellX}
+            onChange={value => this.updateCellSize(value, this.state.cellY)}
+          />
+          <div>height</div>
+          <NumberSetter
+            value={this.state.cellY}
+            onChange={value => this.updateCellSize(this.state.cellX, value)}
+          />
+        </div>
         <Board
-          cellX={this.props.cellX}
-          cellY={this.props.cellY}
+          cellX={this.state.cellX}
+          cellY={this.state.cellY}
           cellsState={this.state.cells}
           onClickCell={index => this.toggleOneCellState(index)}
         />
@@ -173,7 +224,8 @@ export default class Game extends React.Component {
           />
           <ResetButton
             onClick={() => this.setState({
-              cells: this.createCellsStateRandomly()
+              cells: this.createCellsStateRandomly(
+                this.state.cellX, this.state.cellY)
             })}
           />
         </div>
