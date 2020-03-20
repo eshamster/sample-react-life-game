@@ -19,6 +19,7 @@ export default function NumbersSelector(props) {
   for (let i = 0; i <= maxNum; i++){
     btns[i] = (
       <NumButton
+        key={i}
         value={i}
         isSelected={props.selectedValues.includes(i)}
         onClick={() => props.onClickNum(i)}

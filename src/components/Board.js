@@ -10,6 +10,7 @@ export default function Board(props) {
     for (let x = 0; x < props.cellX; x++) {
       row[x] = (
         <Cell
+          key={x+":"+y}
           isLive={cellsState[x][y]}
           onClick={() => props.onClickCell(x, y)}
         />
@@ -17,7 +18,9 @@ export default function Board(props) {
     }
 
     cells[y] = (
-      <div className="board-row">
+      <div
+        key={y}
+        className="board-row">
         {row}
       </div>
     )
