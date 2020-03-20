@@ -5,7 +5,7 @@ export default function NumberSetter(props) {
     <input
       type="number"
       value={props.value}
-      onChange={e => props.onChange(e.target.value)}
+      onChange={e => props.onChange(parseInt(e.target.value))}
     />
   )
 }

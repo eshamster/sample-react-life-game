@@ -8,11 +8,10 @@ export default function Board(props) {
   for (let y = 0; y < props.cellY; y++) {
     let row = Array(props.cellX)
     for (let x = 0; x < props.cellX; x++) {
-      const index = y * props.cellX + x
       row[x] = (
         <Cell
-          isLive={cellsState[index]}
-          onClick={() => props.onClickCell(index)}
+          isLive={cellsState[x][y]}
+          onClick={() => props.onClickCell(x, y)}
         />
       )
     }

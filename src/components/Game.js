@@ -15,8 +15,6 @@ export default class Game extends React.Component {
     const cellY = 25
 
     this.state = {
-      cellX: cellX,
-      cellY: cellY,
       cells: this.createCellsStateRandomly(cellX, cellY),
       isPlaying: false,
       updateIntv: 100, /* ms */
@@ -29,8 +27,8 @@ export default class Game extends React.Component {
   // --- updating --- //
 
   countAroundLivings(x, y, cells) {
-    const cellX = this.state.cellX
-    const cellY = this.state.cellY
+    const cellX = this.getCellX()
+    const cellY = this.getCellY()
 
     const left = (x > 0) ? x - 1 : cellX - 1
     const up   = (y > 0) ? y - 1 : cellY - 1
@@ -38,7 +36,7 @@ export default class Game extends React.Component {
     const down  = (y < cellY - 1) ? y + 1 : 0
 
     const checkCell = (x, y) => {
-      return (cells[y * cellX + x]) ? 1 : 0
+      return (cells[x][y]) ? 1 : 0
     }
 
     return checkCell(left, up) + checkCell(x, up) + checkCell(right, up) +
@@ -49,7 +47,7 @@ export default class Game extends React.Component {
   isLiveInNext(x, y, cells) {
     const count = this.countAroundLivings(x, y, cells)
     const countsToLive =
-          (cells[y * this.state.cellX + x]) ?
+          (cells[x][y]) ?
           this.state.countsToKeep :
           this.state.countsToBorn
 
@@ -57,13 +55,13 @@ export default class Game extends React.Component {
   }
 
   update() {
-    const cellX = this.state.cellX
-    const cellY = this.state.cellY
-    const nextCells = Array(cellX * cellY)
+    const cellX = this.getCellX()
+    const cellY = this.getCellY()
+    const nextCells = this.sliceCells()
 
     for (let y = 0; y < cellY; y++) {
       for (let x = 0; x < cellX; x++) {
-        nextCells[y * cellX + x] =
+        nextCells[x][y] =
           this.isLiveInNext(x, y, this.state.cells)
       }
     }
@@ -104,13 +102,19 @@ export default class Game extends React.Component {
 
   // --- change cell state --- //
 
-  toggleOneCellState(index) {
-    const cells = this.state.cells.slice()
-    if (index < 0 || index >= cells.length) {
-      throw new Error(`Index should be in range [0, ${cells.length}], but got ${index}`)
+  toggleOneCellState(x, y) {
+    const cellX = this.getCellX()
+    const cellY = this.getCellY()
+
+    if (x < 0 || x >= cellX) {
+      throw new Error(`Index should be in range [0, ${cellX}), but got ${x}`)
+    }
+    if (y < 0 || y >= cellY) {
+      throw new Error(`Index should be in range [0, ${cellY}), but got ${y}`)
     }
 
-    cells[index] = !cells[index]
+    const cells = this.sliceCells()
+    cells[x][y] = !cells[x][y]
 
     this.setState({
       cells: cells,
@@ -119,15 +123,23 @@ export default class Game extends React.Component {
 
   killAllCells() {
     this.setState({
-      cells: Array(this.calcCellNum()).fill(false)
+      cells: this.createCleanCells(this.getCellX(), this.getCellY())
     })
   }
 
-  createCellsStateRandomly(cellX, cellY) {
-    const cells = Array(cellX * cellY)
-    for (let i = 0; i < cells.length; i++) {
-      cells[i] = Math.random() > 0.5
+  createCleanCells(cellX, cellY) {
+    const cells = Array(cellX)
+    for (let x = 0; x < cellX; x++) {
+      cells[x] = Array(cellY).fill(false)
     }
+    return cells
+  }
+
+  createCellsStateRandomly(cellX, cellY) {
+    const cells = this.createCleanCells(cellX, cellY)
+    this.forEachCells(cells, (x, y, _) => {
+      cells[x][y] = Math.random() > 0.5
+    })
     return cells
   }
 
@@ -150,16 +162,16 @@ export default class Game extends React.Component {
   // --- cellSize --- //
 
   updateCellSize(cellX, cellY) {
-    const prevX = this.state.cellX
-    const prevY = this.state.cellY
-    const cells = Array(cellX * cellY).fill(false)
-
     if (cellX < 1) {
       cellX = 1
     }
     if (cellY < 1) {
       cellY = 1
     }
+
+    const prevX = this.getCellX()
+    const prevY = this.getCellY()
+    const cells = this.createCleanCells(cellX, cellY)
 
     for (let y = 0; y < cellY; y++) {
       if (y > prevY - 1) {
@@ -169,21 +181,44 @@ export default class Game extends React.Component {
         if (x > prevX - 1) {
           break
         }
-        cells[y * cellX + x] = this.state.cells[y * prevX + x]
+        cells[x][y] = this.state.cells[x][y]
       }
     }
 
     this.setState({
-      cellX: cellX,
-      cellY: cellY,
       cells: cells
     })
   }
 
   // --- utils --- //
 
-  calcCellNum() {
-    return this.state.cellX * this.state.cellY
+  getCellX(cells = this.state.cells) {
+    return cells.length
+  }
+
+  getCellY(cells = this.state.cells) {
+    return cells.length > 0 ? cells[0].length : 0
+  }
+
+  sliceCells() {
+    const cellX = this.getCellX()
+
+    let cells = Array(cellX)
+    for (let x = 0; x < cellX; x++) {
+      cells[x] = this.state.cells[x].slice()
+    }
+    return cells
+  }
+
+  forEachCells(cells, f) {
+    const cellX = this.getCellX(cells)
+    const cellY = this.getCellY(cells)
+
+    for (let x = 0; x < cellX; x++) {
+      for (let y = 0; y < cellY; y++) {
+        f(x, y, cells[x][y])
+      }
+    }
   }
 
   // --- render --- //
@@ -194,20 +229,20 @@ export default class Game extends React.Component {
         <div className="wss">
           <div>width</div>
           <NumberSetter
-            value={this.state.cellX}
-            onChange={value => this.updateCellSize(value, this.state.cellY)}
+            value={this.getCellX()}
+            onChange={value => this.updateCellSize(value, this.getCellY())}
           />
           <div>height</div>
           <NumberSetter
-            value={this.state.cellY}
-            onChange={value => this.updateCellSize(this.state.cellX, value)}
+            value={this.getCellY()}
+            onChange={value => this.updateCellSize(this.getCellX(), value)}
           />
         </div>
         <Board
-          cellX={this.state.cellX}
-          cellY={this.state.cellY}
+          cellX={this.getCellX()}
+          cellY={this.getCellY()}
           cellsState={this.state.cells}
-          onClickCell={index => this.toggleOneCellState(index)}
+          onClickCell={(x, y) => this.toggleOneCellState(x, y)}
         />
         <div>
           <PlayButton
@@ -225,7 +260,7 @@ export default class Game extends React.Component {
           <ResetButton
             onClick={() => this.setState({
               cells: this.createCellsStateRandomly(
-                this.state.cellX, this.state.cellY)
+                this.getCellX(), this.getCellY())
             })}
           />
         </div>
