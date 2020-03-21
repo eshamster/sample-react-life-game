@@ -1,8 +1,8 @@
 import React from 'react'
 import Board from './Board'
-import NumberSelector from './NumbersSelector'
 import ControlPanel from './ControlPanel'
 import BoardSizePanel from './BoardSizePanel'
+import CellCondPanel from './CellCondPanel'
 
 export default class Game extends React.Component {
   constructor(props) {
@@ -257,32 +257,20 @@ export default class Game extends React.Component {
               this.getWidth(), this.getHeight())
           })}
         />
-        <ul>
-          <li>
-            BORN: Required around cells to born
-            <NumberSelector
-              maxNum={8}
-              selectedValues={this.state.countsToBorn}
-              onClickNum={(n) => {
-                this.setState({
-                  countsToBorn: this.toggleNumberSelect(n, this.state.countsToBorn),
-                })
-              }}
-            />
-          </li>
-          <li>
-            KEEP: Required around cells to keep living
-            <NumberSelector
-              maxNum={8}
-              selectedValues={this.state.countsToKeep}
-              onClickNum={(n) => {
-                this.setState({
-                  countsToKeep: this.toggleNumberSelect(n, this.state.countsToKeep),
-                })
-              }}
-            />
-          </li>
-        </ul>
+        <CellCondPanel
+          countsToBorn={this.state.countsToBorn}
+          onClickBornNum={n =>
+            this.setState({
+              countsToBorn: this.toggleNumberSelect(n, this.state.countsToBorn),
+            })
+          }
+          countsToKeep={this.state.countsToKeep}
+          onClickKeepNum={n =>
+            this.setState({
+              countsToKeep: this.toggleNumberSelect(n, this.state.countsToKeep),
+            })
+          }
+        />
       </div>
     )
   }
