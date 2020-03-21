@@ -6,6 +6,7 @@ import ClearButton from './ClearButton'
 import ResetButton from './ResetButton'
 import NumberSetter from './NumberSetter'
 import NumberSelector from './NumbersSelector'
+import IntervalChanger from './IntervalChanger'
 
 export default class Game extends React.Component {
   constructor(props) {
@@ -71,18 +72,18 @@ export default class Game extends React.Component {
 
   // --- playing --- //
 
-  play() {
-    if (this.state.isPlaying) {
-      return
+  play(updateIntv = this.state.updateIntv) {
+    if (this.isPlaying()) {
+      this.stop()
     }
     this.setState({
       isPlaying: true,
-      intvId: setInterval(() => this.update(), this.state.updateIntv)
+      intvId: setInterval(() => this.update(), updateIntv)
     })
   }
 
   stop() {
-    if (!this.state.isPlaying) {
+    if (!this.isPlaying()) {
       return
     }
     clearInterval(this.state.intvId)
@@ -92,11 +93,22 @@ export default class Game extends React.Component {
     })
   }
 
+  isPlaying() {
+    return this.state.isPlaying
+  }
+
   togglePlaying() {
     if (this.state.isPlaying) {
       this.stop()
     } else {
       this.play()
+    }
+  }
+
+  setUpdateInterval(value) {
+    this.setState({updateIntv: value})
+    if (this.isPlaying()) {
+      this.play(value)
     }
   }
 
@@ -248,6 +260,13 @@ export default class Game extends React.Component {
           <PlayButton
             isPlaying={this.state.isPlaying}
             onClick={() => this.togglePlaying()}
+          />
+          <IntervalChanger
+            value={this.state.updateIntv}
+            min={50}
+            max={1000}
+            step={10}
+            onChange={value => this.setUpdateInterval(value)}
           />
         </div>
         <div>
