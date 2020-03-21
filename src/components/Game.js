@@ -1,12 +1,8 @@
 import React from 'react'
 import Board from './Board'
-import StepButton from './StepButton'
-import PlayButton from './PlayButton'
-import ClearButton from './ClearButton'
-import ResetButton from './ResetButton'
 import NumberSetter from './NumberSetter'
 import NumberSelector from './NumbersSelector'
-import IntervalChanger from './IntervalChanger'
+import ControlPanel from './ControlPanel'
 
 export default class Game extends React.Component {
   constructor(props) {
@@ -256,33 +252,18 @@ export default class Game extends React.Component {
           cellsState={this.state.cells}
           onClickCell={(x, y) => this.toggleOneCellState(x, y)}
         />
-        <div>
-          <PlayButton
-            isPlaying={this.state.isPlaying}
-            onClick={() => this.togglePlaying()}
-          />
-          <IntervalChanger
-            value={this.state.updateIntv}
-            min={50}
-            max={1000}
-            step={10}
-            onChange={value => this.setUpdateInterval(value)}
-          />
-        </div>
-        <div>
-          <StepButton
-            onClick={() => this.update()}
-          />
-          <ClearButton
-            onClick={() => this.killAllCells()}
-          />
-          <ResetButton
-            onClick={() => this.setState({
-              cells: this.createCellsStateRandomly(
-                this.getCellX(), this.getCellY())
-            })}
-          />
-        </div>
+        <ControlPanel
+          isPlaying={this.state.isPlaying}
+          onClickPlay={() => this.togglePlaying()}
+          updateIntv={this.state.updateIntv}
+          onChangeInterval={value => this.setUpdateInterval(value)}
+          onClickStep={() => this.update()}
+          onClickClear={() => this.killAllCells()}
+          onClickReset={() => this.setState({
+            cells: this.createCellsStateRandomly(
+              this.getCellX(), this.getCellY())
+          })}
+        />
         <ul>
           <li>
             BORN: Required around cells to born
