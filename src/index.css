@@ -121,8 +121,8 @@ code {
     color: #bbb;
 }
 
-/* --- WSS: Width Height Setter --- */
+/* --- BSP: BoardSizePanel --- */
 
-.wss {
+.bsp {
     display: flex;
 }

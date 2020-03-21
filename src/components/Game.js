@@ -1,8 +1,8 @@
 import React from 'react'
 import Board from './Board'
-import NumberSetter from './NumberSetter'
 import NumberSelector from './NumbersSelector'
 import ControlPanel from './ControlPanel'
+import BoardSizePanel from './BoardSizePanel'
 
 export default class Game extends React.Component {
   constructor(props) {
@@ -234,18 +234,11 @@ export default class Game extends React.Component {
   render() {
     return (
       <div>
-        <div className="wss">
-          <div>width</div>
-          <NumberSetter
-            value={this.getCellX()}
-            onChange={value => this.updateCellSize(value, this.getCellY())}
-          />
-          <div>height</div>
-          <NumberSetter
-            value={this.getCellY()}
-            onChange={value => this.updateCellSize(this.getCellX(), value)}
-          />
-        </div>
+        <BoardSizePanel
+          width={this.getCellX()}
+          height={this.getCellY()}
+          onChange={(width, height) => this.updateCellSize(width, height)}
+        />
         <Board
           cellX={this.getCellX()}
           cellY={this.getCellY()}
