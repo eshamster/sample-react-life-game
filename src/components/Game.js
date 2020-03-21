@@ -8,11 +8,11 @@ export default class Game extends React.Component {
   constructor(props) {
     super(props)
 
-    const cellX = 30
-    const cellY = 25
+    const width = 30
+    const height = 25
 
     this.state = {
-      cells: this.createCellsStateRandomly(cellX, cellY),
+      cells: this.createCellsStateRandomly(width, height),
       isPlaying: false,
       updateIntv: 100, /* ms */
       intvId: undefined,
@@ -24,13 +24,13 @@ export default class Game extends React.Component {
   // --- updating --- //
 
   countAroundLivings(x, y, cells) {
-    const cellX = this.getCellX()
-    const cellY = this.getCellY()
+    const width = this.getWidth()
+    const height = this.getHeight()
 
-    const left = (x > 0) ? x - 1 : cellX - 1
-    const up   = (y > 0) ? y - 1 : cellY - 1
-    const right = (x < cellX - 1) ? x + 1 : 0
-    const down  = (y < cellY - 1) ? y + 1 : 0
+    const left = (x > 0) ? x - 1 : width - 1
+    const up   = (y > 0) ? y - 1 : height - 1
+    const right = (x < width - 1) ? x + 1 : 0
+    const down  = (y < height - 1) ? y + 1 : 0
 
     const checkCell = (x, y) => {
       return (cells[x][y]) ? 1 : 0
@@ -52,12 +52,12 @@ export default class Game extends React.Component {
   }
 
   update() {
-    const cellX = this.getCellX()
-    const cellY = this.getCellY()
+    const width = this.getWidth()
+    const height = this.getHeight()
     const nextCells = this.sliceCells()
 
-    for (let y = 0; y < cellY; y++) {
-      for (let x = 0; x < cellX; x++) {
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
         nextCells[x][y] =
           this.isLiveInNext(x, y, this.state.cells)
       }
@@ -111,14 +111,14 @@ export default class Game extends React.Component {
   // --- change cell state --- //
 
   toggleOneCellState(x, y) {
-    const cellX = this.getCellX()
-    const cellY = this.getCellY()
+    const width = this.getWidth()
+    const height = this.getHeight()
 
-    if (x < 0 || x >= cellX) {
-      throw new Error(`Index should be in range [0, ${cellX}), but got ${x}`)
+    if (x < 0 || x >= width) {
+      throw new Error(`Index should be in range [0, ${width}), but got ${x}`)
     }
-    if (y < 0 || y >= cellY) {
-      throw new Error(`Index should be in range [0, ${cellY}), but got ${y}`)
+    if (y < 0 || y >= height) {
+      throw new Error(`Index should be in range [0, ${height}), but got ${y}`)
     }
 
     const cells = this.sliceCells()
@@ -131,20 +131,20 @@ export default class Game extends React.Component {
 
   killAllCells() {
     this.setState({
-      cells: this.createCleanCells(this.getCellX(), this.getCellY())
+      cells: this.createCleanCells(this.getWidth(), this.getHeight())
     })
   }
 
-  createCleanCells(cellX, cellY) {
-    const cells = Array(cellX)
-    for (let x = 0; x < cellX; x++) {
-      cells[x] = Array(cellY).fill(false)
+  createCleanCells(width, height) {
+    const cells = Array(width)
+    for (let x = 0; x < width; x++) {
+      cells[x] = Array(height).fill(false)
     }
     return cells
   }
 
-  createCellsStateRandomly(cellX, cellY) {
-    const cells = this.createCleanCells(cellX, cellY)
+  createCellsStateRandomly(width, height) {
+    const cells = this.createCleanCells(width, height)
     this.forEachCells(cells, (x, y, _) => {
       cells[x][y] = Math.random() > 0.5
     })
@@ -169,23 +169,23 @@ export default class Game extends React.Component {
 
   // --- cellSize --- //
 
-  updateCellSize(cellX, cellY) {
-    if (cellX < 1) {
-      cellX = 1
+  updateCellSize(width, height) {
+    if (width < 1) {
+      width = 1
     }
-    if (cellY < 1) {
-      cellY = 1
+    if (height < 1) {
+      height = 1
     }
 
-    const prevX = this.getCellX()
-    const prevY = this.getCellY()
-    const cells = this.createCleanCells(cellX, cellY)
+    const prevX = this.getWidth()
+    const prevY = this.getHeight()
+    const cells = this.createCleanCells(width, height)
 
-    for (let y = 0; y < cellY; y++) {
+    for (let y = 0; y < height; y++) {
       if (y > prevY - 1) {
         break
       }
-      for (let x = 0; x < cellX; x++) {
+      for (let x = 0; x < width; x++) {
         if (x > prevX - 1) {
           break
         }
@@ -200,30 +200,30 @@ export default class Game extends React.Component {
 
   // --- utils --- //
 
-  getCellX(cells = this.state.cells) {
+  getWidth(cells = this.state.cells) {
     return cells.length
   }
 
-  getCellY(cells = this.state.cells) {
+  getHeight(cells = this.state.cells) {
     return cells.length > 0 ? cells[0].length : 0
   }
 
   sliceCells() {
-    const cellX = this.getCellX()
+    const width = this.getWidth()
 
-    let cells = Array(cellX)
-    for (let x = 0; x < cellX; x++) {
+    let cells = Array(width)
+    for (let x = 0; x < width; x++) {
       cells[x] = this.state.cells[x].slice()
     }
     return cells
   }
 
   forEachCells(cells, f) {
-    const cellX = this.getCellX(cells)
-    const cellY = this.getCellY(cells)
+    const width = this.getWidth(cells)
+    const height = this.getHeight(cells)
 
-    for (let x = 0; x < cellX; x++) {
-      for (let y = 0; y < cellY; y++) {
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
         f(x, y, cells[x][y])
       }
     }
@@ -235,13 +235,13 @@ export default class Game extends React.Component {
     return (
       <div>
         <BoardSizePanel
-          width={this.getCellX()}
-          height={this.getCellY()}
+          width={this.getWidth()}
+          height={this.getHeight()}
           onChange={(width, height) => this.updateCellSize(width, height)}
         />
         <Board
-          cellX={this.getCellX()}
-          cellY={this.getCellY()}
+          width={this.getWidth()}
+          height={this.getHeight()}
           cellsState={this.state.cells}
           onClickCell={(x, y) => this.toggleOneCellState(x, y)}
         />
@@ -254,7 +254,7 @@ export default class Game extends React.Component {
           onClickClear={() => this.killAllCells()}
           onClickReset={() => this.setState({
             cells: this.createCellsStateRandomly(
-              this.getCellX(), this.getCellY())
+              this.getWidth(), this.getHeight())
           })}
         />
         <ul>
