@@ -3,6 +3,7 @@ import Board from './Board'
 import ControlPanel from './ControlPanel'
 import BoardSizePanel from './BoardSizePanel'
 import CellCondPanel from './CellCondPanel'
+import HistoryPanel from './HistoryPanel'
 import RingBuffer from '../utils/RingBuffer'
 
 export default class Game extends React.Component {
@@ -12,7 +13,7 @@ export default class Game extends React.Component {
     const width = 30
     const height = 25
 
-    const cellsBuffer = new RingBuffer(10)
+    const cellsBuffer = new RingBuffer(100)
     cellsBuffer.add(this.createCellsStateRandomly(width, height))
 
     this.state = {
@@ -260,12 +261,24 @@ export default class Game extends React.Component {
           height={this.getHeight()}
           onChange={(width, height) => this.updateCellSize(width, height)}
         />
-        <Board
-          width={this.getWidth()}
-          height={this.getHeight()}
-          cellsState={this.getCells()}
-          onClickCell={(x, y) => this.toggleOneCellState(x, y)}
-        />
+        <div className="board-panel">
+          <Board
+            width={this.getWidth()}
+            height={this.getHeight()}
+            cellsState={this.getCells()}
+            onClickCell={(x, y) => this.toggleOneCellState(x, y)}
+          />
+          <HistoryPanel
+            minIndex={this.state.cellsBuffer.getMinGlobalIndex()}
+            maxIndex={this.state.cellsBuffer.getMaxGlobalIndex()}
+            value={this.state.cellsBuffer.getCurrentGlobalIndex()}
+            onChange={value => {
+              const cellsBuffer = this.state.cellsBuffer.clone()
+              cellsBuffer.setCaretByGlobalIndex(value)
+              this.setState({cellsBuffer: cellsBuffer})
+            }}
+          />
+        </div>
         <ControlPanel
           isPlaying={this.state.isPlaying}
           onClickPlay={() => this.togglePlaying()}

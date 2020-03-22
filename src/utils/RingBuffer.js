@@ -56,6 +56,12 @@ export default class RingBuffer{
     return this._count > 0 ? this._arr[this._caret] : null
   }
 
+  getCurrentGlobalIndex() {
+    return this._count > 0 ?
+      this._basicGlobalIndex + this._countFromBasic(this._caret) - 1 :
+      -1
+  }
+
   getMinGlobalIndex() {
     return this._basicGlobalIndex
   }

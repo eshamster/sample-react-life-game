@@ -31,7 +31,6 @@ code {
 }
 
 .board {
-    margin: auto;
     display: flex;
     flex-direction: row;
 }
@@ -40,6 +39,18 @@ code {
     clear: both;
     content: "";
     display: table;
+}
+
+.board-panel {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+/* --- History --- */
+
+.history-panel {
+    margin-left: 10px;
 }
 
 /* --- Play/Stop button --- */

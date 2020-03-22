@@ -9,6 +9,7 @@ describe('ring buffer', () => {
       desc: 'Empty',
       exec: () => {},
       expCurrent: null,
+      expCurrentGlobalIndex: -1,
       expList: [],
     },
     {
@@ -17,6 +18,7 @@ describe('ring buffer', () => {
         rb.add(1)
       },
       expCurrent: 1,
+      expCurrentGlobalIndex: 0,
       expList: [
         {globalIndex: 0, item: 1},
       ],
@@ -29,6 +31,7 @@ describe('ring buffer', () => {
         rb.add(4) /* oldest item should be removed */
       },
       expCurrent: 4,
+      expCurrentGlobalIndex: 3,
       expList: [
         {globalIndex: 1, item: 2},
         {globalIndex: 2, item: 3},
@@ -55,6 +58,7 @@ describe('ring buffer', () => {
         rb.setCaretByGlobalIndex(1)
       },
       expCurrent: 2,
+      expCurrentGlobalIndex: 1,
       /* Currently all items should be available */
       expList: [
         {globalIndex: 1, item: 2},
@@ -68,6 +72,7 @@ describe('ring buffer', () => {
         rb.add(5)
       },
       expCurrent: 5,
+      expCurrentGlobalIndex: 2,
       /* Items after caret should be removed */
       expList: [
         {globalIndex: 1, item: 2},
@@ -83,6 +88,7 @@ describe('ring buffer', () => {
       } else {
         tt.exec()
         expect(rb.getCurrent()).toEqual(tt.expCurrent)
+        expect(rb.getCurrentGlobalIndex()).toEqual(tt.expCurrentGlobalIndex)
         expect(rb.getListWithGlobalIndex()).toEqual(tt.expList)
 
         const len = tt.expList.length
