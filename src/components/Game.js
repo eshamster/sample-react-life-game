@@ -3,6 +3,7 @@ import Board from './Board'
 import ControlPanel from './ControlPanel'
 import BoardSizePanel from './BoardSizePanel'
 import CellCondPanel from './CellCondPanel'
+import RingBuffer from '../utils/RingBuffer'
 
 export default class Game extends React.Component {
   constructor(props) {
@@ -11,8 +12,11 @@ export default class Game extends React.Component {
     const width = 30
     const height = 25
 
+    const cellsBuffer = new RingBuffer(10)
+    cellsBuffer.add(this.createCellsStateRandomly(width, height))
+
     this.state = {
-      cells: this.createCellsStateRandomly(width, height),
+      cellsBuffer: cellsBuffer,
       isPlaying: false,
       updateIntv: 100, /* ms */
       intvId: undefined,
@@ -55,15 +59,16 @@ export default class Game extends React.Component {
     const width = this.getWidth()
     const height = this.getHeight()
     const nextCells = this.sliceCells()
+    const cells = this.getCells()
 
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
         nextCells[x][y] =
-          this.isLiveInNext(x, y, this.state.cells)
+          this.isLiveInNext(x, y, cells)
       }
     }
 
-    this.setState({cells: nextCells})
+    this.setState({cellsBuffer: this.addCells(nextCells)})
   }
 
   // --- playing --- //
@@ -125,13 +130,14 @@ export default class Game extends React.Component {
     cells[x][y] = !cells[x][y]
 
     this.setState({
-      cells: cells,
+      cellsBuffer: this.addCells(cells),
     })
   }
 
   killAllCells() {
     this.setState({
-      cells: this.createCleanCells(this.getWidth(), this.getHeight())
+      cellsBuffer: this.addCells(
+        this.createCleanCells(this.getWidth(), this.getHeight())),
     })
   }
 
@@ -179,7 +185,8 @@ export default class Game extends React.Component {
 
     const prevX = this.getWidth()
     const prevY = this.getHeight()
-    const cells = this.createCleanCells(width, height)
+    const nextCells = this.createCleanCells(width, height)
+    const cells = this.getCells()
 
     for (let y = 0; y < height; y++) {
       if (y > prevY - 1) {
@@ -189,33 +196,47 @@ export default class Game extends React.Component {
         if (x > prevX - 1) {
           break
         }
-        cells[x][y] = this.state.cells[x][y]
+        nextCells[x][y] = cells[x][y]
       }
     }
 
     this.setState({
-      cells: cells
+      cellsBuffer: this.addCells(nextCells)
     })
   }
 
   // --- utils --- //
 
-  getWidth(cells = this.state.cells) {
+  getWidth(cells = this.getCells()) {
     return cells.length
   }
 
-  getHeight(cells = this.state.cells) {
+  getHeight(cells = this.getCells()) {
     return cells.length > 0 ? cells[0].length : 0
   }
 
-  sliceCells() {
-    const width = this.getWidth()
+  sliceCells(cells = this.getCells()) {
+    const width = this.getWidth(cells)
 
-    let cells = Array(width)
+    let res = Array(width)
     for (let x = 0; x < width; x++) {
-      cells[x] = this.state.cells[x].slice()
+      res[x] = cells[x].slice()
     }
-    return cells
+    return res
+  }
+
+  getCells() {
+    return this.state.cellsBuffer.getCurrent()
+  }
+
+  addCells(cells) {
+    // // Note: Probably cell level cloning is overdone.
+    // const cellsBuffer = this.state.cellsBuffer.clone(
+    //   cells => this.sliceCells(cells)
+    // )
+    const cellsBuffer = this.state.cellsBuffer.clone()
+    cellsBuffer.add(cells)
+    return cellsBuffer
   }
 
   forEachCells(cells, f) {
@@ -242,7 +263,7 @@ export default class Game extends React.Component {
         <Board
           width={this.getWidth()}
           height={this.getHeight()}
-          cellsState={this.state.cells}
+          cellsState={this.getCells()}
           onClickCell={(x, y) => this.toggleOneCellState(x, y)}
         />
         <ControlPanel
@@ -253,8 +274,8 @@ export default class Game extends React.Component {
           onClickStep={() => this.update()}
           onClickClear={() => this.killAllCells()}
           onClickReset={() => this.setState({
-            cells: this.createCellsStateRandomly(
-              this.getWidth(), this.getHeight())
+            cellsBuffer: this.addCells(
+              this.createCellsStateRandomly(this.getWidth(), this.getHeight()))
           })}
         />
         <CellCondPanel
