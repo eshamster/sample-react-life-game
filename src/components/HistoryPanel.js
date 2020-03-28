@@ -15,13 +15,14 @@ export default function HistoryPanel(props) {
   } 
 
   return (
-    <select
-      className="history-panel"
-      size={15}
-      value={props.value}
-      onChange={e => props.onChange(parseInt(e.target.value))}
-    >
-      {opts}
-    </select>
+    <div className="history-panel">
+      <select
+        size={15}
+        value={props.value}
+        onChange={e => props.onChange(parseInt(e.target.value))}
+      >
+        {opts}
+      </select>
+    </div>
   )
 }
