@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function IntervalChanger(props) {
   return (
-    <>
+    <div class="interval-changer">
       <div>Update Interval: {props.value} [ms]</div>
       <input
         type="range"
@@ -12,6 +12,6 @@ export default function IntervalChanger(props) {
         value={props.value}
         onChange={e => props.onChange(parseInt(e.target.value))}
       />
-    </>
+    </div>
   )
 }

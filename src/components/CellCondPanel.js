@@ -3,7 +3,7 @@ import NumberSelector from './NumbersSelector'
 
 export default function CellCondPanel(props) {
   return (
-    <ul>
+    <ul className="ccp-ul">
       <li>
         BORN: Required around cells to born
         <NumberSelector

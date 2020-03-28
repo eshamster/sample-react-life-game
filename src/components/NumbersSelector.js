@@ -28,6 +28,6 @@ export default function NumbersSelector(props) {
   }
   
   return (
-    <div>{btns}</div>
+    <div className="ns">{btns}</div>
   )
 }

@@ -4,12 +4,12 @@ import NumberSetter from './NumberSetter'
 export default function BoardSizePanel(props) {
   return (
     <div className="bsp">
-      <div>width</div>
+      <div className="bsp-text">width</div>
       <NumberSetter
         value={props.width}
         onChange={value => props.onChange(value, props.height)}
       />
-      <div>height</div>
+      <div className="bsp-text">height</div>
       <NumberSetter
         value={props.height}
         onChange={value => props.onChange(props.width, value)}

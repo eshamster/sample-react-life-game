@@ -7,8 +7,8 @@ import IntervalChanger from './IntervalChanger'
 
 export default function ControlPanel(props) {
   return (
-    <div>
-      <div>
+    <div className="control-panel">
+      <div class="play-panel">
         <PlayButton
           isPlaying={props.isPlaying}
           onClick={() => props.onClickPlay()}
