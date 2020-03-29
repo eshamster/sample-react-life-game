@@ -56,6 +56,7 @@ code {
 .history-panel {
     width: 20px;
     margin-left: 10px;
+    margin-right: 10px;
 }
 
 /* --- Control Panel --- */
@@ -179,4 +180,15 @@ code {
 
 .number-setter {
     width: 50px;
+}
+
+/* --- DataPanel --- */
+
+.data-panel {
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+}
+
+.data-panel-copy {
 }
