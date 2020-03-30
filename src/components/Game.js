@@ -227,7 +227,7 @@ export default class Game extends React.Component {
     let foundCell = false
 
     for (let y = 0; y < height; y++) {
-      for (let x = 0; x < height; x++) {
+      for (let x = 0; x < width; x++) {
         if (!cells[x][y]) {
           continue
         }
