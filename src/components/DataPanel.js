@@ -9,6 +9,12 @@ export default function DataPanel(props) {
       >
         Copy
       </button>
+      <button
+        className="data-panel-edit"
+        onClick={() => props.onClickEdit()}
+      >
+        Edit
+      </button>
       <div/>
     </div>
   )

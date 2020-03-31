@@ -5,6 +5,7 @@ import BoardSizePanel from './BoardSizePanel'
 import CellCondPanel from './CellCondPanel'
 import HistoryPanel from './HistoryPanel'
 import DataPanel from './DataPanel'
+import Editor from './Editor/Editor'
 import ClipBoard from '../utils/ClipBoard'
 import RingBuffer from '../utils/RingBuffer'
 
@@ -25,6 +26,7 @@ export default class Game extends React.Component {
       intvId: undefined,
       countsToBorn: [3],
       countsToKeep: [2,3],
+      mode: "game", // game, editor
     }
   }
 
@@ -257,6 +259,26 @@ export default class Game extends React.Component {
     ).join("\n")
   }
 
+  // --- edit --- //
+
+  startEditor() {
+    this.stop()
+    this.setState({mode: "editor"})
+  }
+
+  cancelEditor() {
+    this.setState({mode: "game"})
+  }
+
+  submitEditor(cells) {
+    // TODO: validate cells
+
+    this.setState({
+      cellsBuffer: this.addCells(cells),
+      mode: "game",
+    })
+  }
+
   // --- Utils --- //
 
   getWidth(cells = this.getCells()) {
@@ -304,7 +326,7 @@ export default class Game extends React.Component {
 
   // --- render --- //
 
-  render() {
+  renderGame() {
     return (
       <div>
         <BoardSizePanel
@@ -331,6 +353,7 @@ export default class Game extends React.Component {
           />
           <DataPanel
             onClickCopy={() => this.copyBoard()}
+            onClickEdit={() => this.startEditor()}
           />
         </div>
         <ControlPanel
@@ -361,5 +384,26 @@ export default class Game extends React.Component {
         />
       </div>
     )
+  }
+
+  render() {
+    const mode = this.state.mode
+
+    switch (mode) {
+    case "game":
+      return this.renderGame()
+    case "editor":
+      return (
+        <div>
+          <Editor
+            defaultText={this.cellsToText(this.getCells())}
+            onClickCancel={() => this.cancelEditor()}
+            onClickSubmit={cells => this.submitEditor(cells)}
+          />
+        </div>
+      )
+    default:
+      throw new Error(`Error: Not recognized mode ${mode}`)
+    }
   }
 }
