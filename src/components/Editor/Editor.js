@@ -1,5 +1,6 @@
 import React from 'react'
 import './Editor.css'
+import DirButtons from './DirButtons'
 
 export default class Editor extends React.Component {
   constructor(props) {
@@ -46,6 +47,79 @@ export default class Editor extends React.Component {
     return this.inverseMatrix(inversedCells)
   }
 
+  addLine(str, dir) {
+    if (str === "") {
+      return "□"
+    }
+
+    switch (dir) {
+    case "left": {
+      const tmp = str
+            .split("\n")
+            .map(str => " " + str)
+            .join("\n")
+      return this.fillSpace(tmp)
+    }
+    case "right": {
+      const tmp = str
+            .split("\n")
+            .map(str => str + " ")
+            .join("\n")
+      return this.fillSpace(tmp)
+    }
+    case "top":
+      return this.fillSpace("\n" + str)
+    case "bottom":
+      return this.fillSpace(str + "\n")
+    default:
+      throw new Error(`Not recoginzed direction "${dir}"`)
+    }
+  }
+
+  addLineMod(dir) {
+    this.setState({text: this.addLine(this.state.text, dir)})
+  }
+
+  removeLine(str, dir) {
+    switch (dir) {
+    case "left": {
+      const tmp = str
+            .split("\n")
+            .map(str => str.replace(/^./, ""))
+            .join("\n")
+      return this.fillSpace(tmp)
+    }
+    case "right": {
+      const tmp = str
+            .split("\n")
+            .map(str => str.replace(/.$/, ""))
+            .join("\n")
+      return this.fillSpace(tmp)
+    }
+    case "top":{
+      const tmp = str
+            .split("\n")
+            .slice(1)
+            .join("\n")
+      return this.fillSpace(tmp)
+    }
+    case "bottom": {
+      const tmp = str
+            .split("\n")
+            .slice(0, -1)
+            .join("\n")
+      return this.fillSpace(tmp)
+    }
+    default:
+      throw new Error(`Not recoginzed direction "${dir}"`)
+    }
+  }
+
+  removeLineMod(dir) {
+    this.setState({text: this.removeLine(this.state.text, dir)})
+  }
+
+  // For submit
   inverseMatrix(matrix) {
     if (matrix.length === 0) {
       throw new Error("matrix should not be empty")
@@ -87,12 +161,26 @@ export default class Editor extends React.Component {
             >
               Fill Space
             </button>
-            <button
-              className="editor-edit-button"
-              onClick={() => alert(this.toCells(this.state.text)[0])}
-            >
-              Dummy
-            </button>
+            <DirButtons
+              leftText="←"
+              onClickLeft={() => this.addLineMod("left")}
+              rightText="→"
+              onClickRight={() => this.addLineMod("right")}
+              topText="↑"
+              onClickTop={() => this.addLineMod("top")}
+              bottomText="↓"
+              onClickBottom={() => this.addLineMod("bottom")}
+            />
+            <DirButtons
+              leftText="→"
+              onClickLeft={() => this.removeLineMod("left")}
+              rightText="←"
+              onClickRight={() => this.removeLineMod("right")}
+              topText="↓"
+              onClickTop={() => this.removeLineMod("top")}
+              bottomText="↑"
+              onClickBottom={() => this.removeLineMod("bottom")}
+            />
           </div>
         </div>
         <div className="editor-control-panel">

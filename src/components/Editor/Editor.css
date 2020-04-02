@@ -6,6 +6,8 @@
 }
 
 .editor-input {
+    white-space: nowrap;
+    overflow: auto;
 }
 
 .editor-edit-panel{
@@ -24,4 +26,26 @@
 
 .editor-control-button {
     margin-bottom: 5px;
+}
+
+/* --- DirButtons --- */
+
+.dir-buttons {
+    display: flex;
+    margin-right: 5px;
+}
+
+.dir-buttons-center {
+    display: flex;
+    flex-direction: column;
+}
+
+.dir-button-horiz {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.dir-button-vert {
+    width: 30px;
+    text-align: center;
 }
