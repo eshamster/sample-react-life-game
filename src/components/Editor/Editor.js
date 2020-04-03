@@ -1,6 +1,7 @@
 import React from 'react'
 import './Editor.css'
 import DirButtons from './DirButtons'
+import StrCells from '../../utils/StringCells'
 
 export default class Editor extends React.Component {
   constructor(props) {
@@ -11,25 +12,8 @@ export default class Editor extends React.Component {
     }
   }
 
-  fillSpace(str) {
-    const formedStr = str
-          .replace(/[^ 01■□\n]/g, "")
-          .replace(/ /g, "□")
-          .replace(/0/g, "□")
-          .replace(/1/g, "■")
-
-    const splitted = formedStr.split("\n")
-    const maxWidth = splitted
-          .map(str => str.length)
-          .reduce((a, b) => Math.max(a, b))
-
-    const filledArray = splitted.map(str => str + "□".repeat(maxWidth - str.length))
-
-    return filledArray.join("\n")
-  }
-
   toCells(str) {
-    const formatted = this.fillSpace(str)
+    const formatted = StrCells.fillSpace(str)
     if (formatted.length === 0) {
       return [[0]]
     }
@@ -47,76 +31,12 @@ export default class Editor extends React.Component {
     return this.inverseMatrix(inversedCells)
   }
 
-  addLine(str, dir) {
-    if (str === "") {
-      return "□"
-    }
-
-    switch (dir) {
-    case "left": {
-      const tmp = str
-            .split("\n")
-            .map(str => " " + str)
-            .join("\n")
-      return this.fillSpace(tmp)
-    }
-    case "right": {
-      const tmp = str
-            .split("\n")
-            .map(str => str + " ")
-            .join("\n")
-      return this.fillSpace(tmp)
-    }
-    case "top":
-      return this.fillSpace("\n" + str)
-    case "bottom":
-      return this.fillSpace(str + "\n")
-    default:
-      throw new Error(`Not recoginzed direction "${dir}"`)
-    }
-  }
-
   addLineMod(dir) {
-    this.setState({text: this.addLine(this.state.text, dir)})
-  }
-
-  removeLine(str, dir) {
-    switch (dir) {
-    case "left": {
-      const tmp = str
-            .split("\n")
-            .map(str => str.replace(/^./, ""))
-            .join("\n")
-      return this.fillSpace(tmp)
-    }
-    case "right": {
-      const tmp = str
-            .split("\n")
-            .map(str => str.replace(/.$/, ""))
-            .join("\n")
-      return this.fillSpace(tmp)
-    }
-    case "top":{
-      const tmp = str
-            .split("\n")
-            .slice(1)
-            .join("\n")
-      return this.fillSpace(tmp)
-    }
-    case "bottom": {
-      const tmp = str
-            .split("\n")
-            .slice(0, -1)
-            .join("\n")
-      return this.fillSpace(tmp)
-    }
-    default:
-      throw new Error(`Not recoginzed direction "${dir}"`)
-    }
+    this.setState({text: StrCells.addLine(this.state.text, dir)})
   }
 
   removeLineMod(dir) {
-    this.setState({text: this.removeLine(this.state.text, dir)})
+    this.setState({text: StrCells.removeLine(this.state.text, dir)})
   }
 
   // For submit
@@ -157,7 +77,7 @@ export default class Editor extends React.Component {
           <div className="editor-edit-panel">
             <button
               className="editor-edit-button"
-              onClick={() => this.setState({text: this.fillSpace(this.state.text)})}
+              onClick={() => this.setState({text: StrCells.fillSpace(this.state.text)})}
             >
               Fill Space
             </button>
