@@ -6,6 +6,7 @@ import CellCondPanel from './CellCondPanel'
 import HistoryPanel from './HistoryPanel'
 import DataPanel from './DataPanel'
 import Editor from './Editor/Editor'
+import Cells from '../utils/Cells'
 import ClipBoard from '../utils/ClipBoard'
 import RingBuffer from '../utils/RingBuffer'
 
@@ -17,7 +18,7 @@ export default class Game extends React.Component {
     const height = 25
 
     const cellsBuffer = new RingBuffer(100)
-    cellsBuffer.add(this.createCellsStateRandomly(width, height))
+    cellsBuffer.add(Cells.initRandomly(width, height))
 
     this.state = {
       cellsBuffer: cellsBuffer,
@@ -32,28 +33,10 @@ export default class Game extends React.Component {
 
   // --- updating --- //
 
-  countAroundLivings(x, y, cells) {
-    const width = this.getWidth()
-    const height = this.getHeight()
-
-    const left = (x > 0) ? x - 1 : width - 1
-    const up   = (y > 0) ? y - 1 : height - 1
-    const right = (x < width - 1) ? x + 1 : 0
-    const down  = (y < height - 1) ? y + 1 : 0
-
-    const checkCell = (x, y) => {
-      return (cells[x][y]) ? 1 : 0
-    }
-
-    return checkCell(left, up) + checkCell(x, up) + checkCell(right, up) +
-      checkCell(left, y) /* ignore self */ + checkCell(right, y) +
-      checkCell(left, down) + checkCell(x, down) + checkCell(right, down)
-  }
-
   isLiveInNext(x, y, cells) {
-    const count = this.countAroundLivings(x, y, cells)
+    const count = cells.countAroundLivings(x, y)
     const countsToLive =
-          (cells[x][y]) ?
+          cells.getCellState(x, y) ?
           this.state.countsToKeep :
           this.state.countsToBorn
 
@@ -63,17 +46,16 @@ export default class Game extends React.Component {
   update() {
     const width = this.getWidth()
     const height = this.getHeight()
-    const nextCells = this.sliceCells()
     const cells = this.getCells()
+    const nextCells = cells.clone()
 
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
-        nextCells[x][y] =
-          this.isLiveInNext(x, y, cells)
+        nextCells.setCellMod(x, y, this.isLiveInNext(x, y, cells))
       }
     }
 
-    this.setState({cellsBuffer: this.addCells(nextCells)})
+    this.updateCells(nextCells)
   }
 
   // --- playing --- //
@@ -121,45 +103,13 @@ export default class Game extends React.Component {
   // --- change cell state --- //
 
   toggleOneCellState(x, y) {
-    const width = this.getWidth()
-    const height = this.getHeight()
-
-    if (x < 0 || x >= width) {
-      throw new Error(`Index should be in range [0, ${width}), but got ${x}`)
-    }
-    if (y < 0 || y >= height) {
-      throw new Error(`Index should be in range [0, ${height}), but got ${y}`)
-    }
-
-    const cells = this.sliceCells()
-    cells[x][y] = !cells[x][y]
-
-    this.setState({
-      cellsBuffer: this.addCells(cells),
-    })
+    const cells = this.getCells()
+    const state = cells.getCellState(x, y)
+    this.updateCells(cells.setCell(x, y, !state))
   }
 
   killAllCells() {
-    this.setState({
-      cellsBuffer: this.addCells(
-        this.createCleanCells(this.getWidth(), this.getHeight())),
-    })
-  }
-
-  createCleanCells(width, height) {
-    const cells = Array(width)
-    for (let x = 0; x < width; x++) {
-      cells[x] = Array(height).fill(false)
-    }
-    return cells
-  }
-
-  createCellsStateRandomly(width, height) {
-    const cells = this.createCleanCells(width, height)
-    this.forEachCells(cells, (x, y, _) => {
-      cells[x][y] = Math.random() > 0.5
-    })
-    return cells
+    this.updateCells(Cells.init(this.getWidth(), this.getHeight()))
   }
 
   // --- set living conditions --- //
@@ -181,33 +131,7 @@ export default class Game extends React.Component {
   // --- cellSize --- //
 
   updateCellSize(width, height) {
-    if (width < 1) {
-      width = 1
-    }
-    if (height < 1) {
-      height = 1
-    }
-
-    const prevX = this.getWidth()
-    const prevY = this.getHeight()
-    const nextCells = this.createCleanCells(width, height)
-    const cells = this.getCells()
-
-    for (let y = 0; y < height; y++) {
-      if (y > prevY - 1) {
-        break
-      }
-      for (let x = 0; x < width; x++) {
-        if (x > prevX - 1) {
-          break
-        }
-        nextCells[x][y] = cells[x][y]
-      }
-    }
-
-    this.setState({
-      cellsBuffer: this.addCells(nextCells)
-    })
+    this.updateCells(this.getCells().cloneWithNewSize(width, height))
   }
 
   // --- copy --- //
@@ -219,8 +143,8 @@ export default class Game extends React.Component {
   }
 
   cellsToText(cells) {
-    const width = this.getWidth(cells)
-    const height = this.getHeight(cells)
+    const width = cells.getWidth()
+    const height = cells.getHeight()
 
     let left = width - 1
     let right = 0
@@ -230,7 +154,7 @@ export default class Game extends React.Component {
 
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
-        if (!cells[x][y]) {
+        if (!cells.getCellState(x, y)) {
           continue
         }
         foundCell = true
@@ -250,7 +174,8 @@ export default class Game extends React.Component {
 
     for (let y = top; y <= bottom; y++) {
       for (let x = left; x <= right; x++) {
-        stringCells[y - top][x - left] = cells[x][y] ? "■" : "□"
+        stringCells[y - top][x - left] =
+          cells.getCellState(x, y) ? "■" : "□"
       }
     }
 
@@ -271,57 +196,32 @@ export default class Game extends React.Component {
   }
 
   submitEditor(cells) {
-    // TODO: validate cells
-
-    this.setState({
-      cellsBuffer: this.addCells(cells),
-      mode: "game",
-    })
+    this.updateCells(cells)
+    this.setState({mode: "game"})
   }
 
   // --- Utils --- //
 
   getWidth(cells = this.getCells()) {
-    return cells.length
+    return cells.getWidth()
   }
 
   getHeight(cells = this.getCells()) {
-    return cells.length > 0 ? cells[0].length : 0
-  }
-
-  sliceCells(cells = this.getCells()) {
-    const width = this.getWidth(cells)
-
-    let res = Array(width)
-    for (let x = 0; x < width; x++) {
-      res[x] = cells[x].slice()
-    }
-    return res
+    return cells.getHeight()
   }
 
   getCells() {
     return this.state.cellsBuffer.getCurrent()
   }
 
-  addCells(cells) {
+  updateCells(cells) {
     // // Note: Probably cell level cloning is overdone.
     // const cellsBuffer = this.state.cellsBuffer.clone(
-    //   cells => this.sliceCells(cells)
+    //   cells => Cells.clone(cells)
     // )
     const cellsBuffer = this.state.cellsBuffer.clone()
     cellsBuffer.add(cells)
-    return cellsBuffer
-  }
-
-  forEachCells(cells, f) {
-    const width = this.getWidth(cells)
-    const height = this.getHeight(cells)
-
-    for (let x = 0; x < width; x++) {
-      for (let y = 0; y < height; y++) {
-        f(x, y, cells[x][y])
-      }
-    }
+    this.setState({cellsBuffer: cellsBuffer})
   }
 
   // --- render --- //
@@ -338,7 +238,7 @@ export default class Game extends React.Component {
           <Board
             width={this.getWidth()}
             height={this.getHeight()}
-            cellsState={this.getCells()}
+            cellsState={this.getCells().toArray()}
             onClickCell={(x, y) => this.toggleOneCellState(x, y)}
           />
           <HistoryPanel
@@ -363,10 +263,9 @@ export default class Game extends React.Component {
           onChangeInterval={value => this.setUpdateInterval(value)}
           onClickStep={() => this.update()}
           onClickClear={() => this.killAllCells()}
-          onClickReset={() => this.setState({
-            cellsBuffer: this.addCells(
-              this.createCellsStateRandomly(this.getWidth(), this.getHeight()))
-          })}
+          onClickReset={() => this.updateCells(
+            Cells.initRandomly(this.getWidth(), this.getHeight())
+          )}
         />
         <CellCondPanel
           countsToBorn={this.state.countsToBorn}

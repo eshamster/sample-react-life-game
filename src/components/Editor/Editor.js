@@ -12,53 +12,12 @@ export default class Editor extends React.Component {
     }
   }
 
-  toCells(str) {
-    const formatted = StrCells.fillSpace(str)
-    if (formatted.length === 0) {
-      return [[0]]
-    }
-
-    const inversedCells = formatted
-          .split("\n")
-          .map(str => {
-            const res = Array(str.length)
-            for (let i = 0; i < str.length; i++) {
-              res[i] = str.charAt(i) === "■"
-            }
-            return res
-          })
-
-    return this.inverseMatrix(inversedCells)
-  }
-
   addLineMod(dir) {
     this.setState({text: StrCells.addLine(this.state.text, dir)})
   }
 
   removeLineMod(dir) {
     this.setState({text: StrCells.removeLine(this.state.text, dir)})
-  }
-
-  // For submit
-  inverseMatrix(matrix) {
-    if (matrix.length === 0) {
-      throw new Error("matrix should not be empty")
-    }
-
-    // Omit to check if all of arrays in the matrix have same length.
-    const newHeight = matrix[0].length
-    const newWidth = matrix.length
-    const res = Array(newHeight)
-
-    for (let y = 0; y < newHeight; y++) {
-      const arr = Array(newWidth)
-      for (let x = 0; x < newWidth; x++) {
-        arr[x] = matrix[x][y]
-      }
-      res[y] = arr
-    }
-
-    return res
   }
 
   render() {
@@ -106,7 +65,7 @@ export default class Editor extends React.Component {
         <div className="editor-control-panel">
           <button
             className="editor-control-button"
-            onClick={() => this.props.onClickSubmit(this.toCells(this.state.text))}
+            onClick={() => this.props.onClickSubmit(StrCells.toCells(this.state.text))}
           >
             Submit
           </button>

@@ -11,7 +11,7 @@ export default function Board(props) {
       row[x] = (
         <Cell
           key={x+":"+y}
-          isLive={cellsState[x][y]}
+          isLive={cellsState[y][x]}
           onClick={() => props.onClickCell(x, y)}
         />
       )

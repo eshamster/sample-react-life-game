@@ -1,3 +1,5 @@
+import Cells from './Cells'
+
 export default class StringCells {
   // Fill spaces by dead cells.
   // And each characters are processed as the followings.
@@ -85,5 +87,26 @@ export default class StringCells {
     default:
       throw new Error(`Not recognized direction "${dir}"`)
     }
+  }
+
+  static toCells(str) {
+    const formatted = this.fillSpace(str)
+    if (formatted.length === 0) {
+      return Cells.init(1, 1)
+    }
+
+    const splitted = formatted.split("\n")
+    const width = splitted[0].length
+    const height = splitted.length
+
+    const cells = Cells.init(width, height)
+    for (let y = 0; y < height; y++) {
+      const str = splitted[y]
+      for (let x = 0; x < width; x++) {
+        cells.setCellMod(x, y, str.charAt(x) === "■")
+      }
+    }
+
+    return cells
   }
 }

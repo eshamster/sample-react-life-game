@@ -137,3 +137,40 @@ describe('removeLine', () => {
     })
   })
 })
+
+describe('toCells', () => {
+  const t = true
+  const f = false
+
+  const testTable = [
+    {
+      desc: 'Empty string',
+      input: '',
+      output: [[f]],
+    },
+    {
+      desc: 'Some string',
+      input: '□□■\n□■□',
+      output: [
+        [f, f, t],
+        [f, t, f],
+      ],
+    },
+  ]
+
+  testTable.forEach(tt => {
+    test(tt.desc, () => {
+      const output = StrCells.toCells(tt.input)
+      const width = tt.output[0].length
+      const height = tt.output.length
+
+      expect(output.getWidth()).toEqual(width)
+      expect(output.getHeight()).toEqual(height)
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          expect(output.getCellState(x, y)).toEqual(tt.output[y][x])
+        }
+      }
+    })
+  })
+})
