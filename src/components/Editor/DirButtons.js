@@ -17,6 +17,11 @@ export default function DirButtons(props) {
           {props.topText}
         </button>
         <button
+          onClick={() => props.onClickCenter()}
+        >
+          {props.centerText}
+        </button>
+        <button
           className="dir-button-vert"
           onClick={() => props.onClickBottom()}
         >

@@ -12,12 +12,32 @@ export default class Editor extends React.Component {
     }
   }
 
+  allDirs() {
+    return ["left", "right", "top", "bottom"]
+  }
+
   addLineMod(dir) {
-    this.setState({text: StrCells.addLine(this.state.text, dir)})
+    if (dir === "all") {
+      let res = this.state.text
+      this.allDirs().forEach(dir => {
+        res = StrCells.addLine(res, dir)
+      })
+      this.setState({text: res})
+    } else {
+      this.setState({text: StrCells.addLine(this.state.text, dir)})
+    }
   }
 
   removeLineMod(dir) {
-    this.setState({text: StrCells.removeLine(this.state.text, dir)})
+    if (dir === "all") {
+      let res = this.state.text
+      this.allDirs().forEach(dir => {
+        res = StrCells.removeLine(res, dir)
+      })
+      this.setState({text: res})
+    } else {
+      this.setState({text: StrCells.removeLine(this.state.text, dir)})
+    }
   }
 
   render() {
@@ -41,6 +61,8 @@ export default class Editor extends React.Component {
               Fill Space
             </button>
             <DirButtons
+              centerText="Add"
+              onClickCenter={() => this.addLineMod("all")}
               leftText="←"
               onClickLeft={() => this.addLineMod("left")}
               rightText="→"
@@ -51,6 +73,8 @@ export default class Editor extends React.Component {
               onClickBottom={() => this.addLineMod("bottom")}
             />
             <DirButtons
+              centerText="Del"
+              onClickCenter={() => this.removeLineMod("all")}
               leftText="→"
               onClickLeft={() => this.removeLineMod("left")}
               rightText="←"
