@@ -1,4 +1,5 @@
 import StrCells from './StringCells'
+import Cells from './Cells'
 
 describe('fillSpace', () => {
   const testTable = [
@@ -136,6 +137,19 @@ describe('removeLine', () => {
       }
     })
   })
+})
+
+test('fromCells', () => {
+  /*
+    tft
+    ftf
+   */
+  const cells = Cells.init(3, 2)
+  cells.setCellMod(0, 0, true)
+  cells.setCellMod(2, 0, true)
+  cells.setCellMod(1, 1, true)
+
+  expect(StrCells.fromCells(cells)).toEqual("■□■\n□■□")
 })
 
 describe('toCells', () => {

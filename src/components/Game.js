@@ -295,7 +295,7 @@ export default class Game extends React.Component {
       return (
         <div>
           <Editor
-            defaultText={this.cellsToText(this.getCells())}
+            currentCells={this.getCells()}
             onClickCancel={() => this.cancelEditor()}
             onClickSubmit={cells => this.submitEditor(cells)}
           />

@@ -8,7 +8,7 @@ export default class Editor extends React.Component {
     super(props)
 
     this.state = {
-      text: props.defaultText,
+      text: StrCells.fromCells(props.currentCells),
     }
   }
 

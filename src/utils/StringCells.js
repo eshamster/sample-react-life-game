@@ -89,6 +89,23 @@ export default class StringCells {
     }
   }
 
+  static fromCells(cells) {
+    const width = cells.getWidth()
+    const height = cells.getHeight()
+    const strMatrix = Array(height)
+
+    for (let y = 0; y < height; y++) {
+      strMatrix[y] = Array(width).fill("")
+    }
+
+    cells.forEach((x, y, value) =>
+      strMatrix[y][x] = value ? "■" : "□")
+
+    return strMatrix
+      .map(strArray => strArray.join(""))
+      .join("\n")
+  }
+
   static toCells(str) {
     const formatted = this.fillSpace(str)
     if (formatted.length === 0) {

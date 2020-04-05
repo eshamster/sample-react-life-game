@@ -14,13 +14,13 @@ export default class Cells {
 
   static initRandomly(width, height) {
     const cells = this.init(width, height)
-    cells._forEachCells((x, y, _) => {
+    cells.forEach((x, y, _) => {
       cells.setCellMod(x, y, Math.random() > 0.5)
     })
     return cells
   }
 
-  _forEachCells(f) {
+  forEach(f) {
     const width = this.getWidth()
     const height = this.getHeight()
 
