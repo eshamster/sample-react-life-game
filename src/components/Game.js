@@ -238,7 +238,7 @@ export default class Game extends React.Component {
           <Board
             width={this.getWidth()}
             height={this.getHeight()}
-            cellsState={this.getCells().toArray()}
+            cellsState={this.getCells()}
             onClickCell={(x, y) => this.toggleOneCellState(x, y)}
           />
           <HistoryPanel

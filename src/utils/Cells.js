@@ -122,10 +122,6 @@ export default class Cells {
     return this.cells.length
   }
 
-  toArray() {
-    return this.cells
-  }
-
   _checkRange(x, y) {
     const width = this.getWidth()
     const height = this.getHeight()

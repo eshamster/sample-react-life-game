@@ -165,18 +165,3 @@ describe('cloneWithNewSize', () => {
     })
   })
 })
-
-test('toArray', () => {
-  const cells = Cells.init(3, 2)
-  cells.setCellMod(0, 0, t)
-  cells.setCellMod(2, 0, t)
-  cells.setCellMod(1, 1, t)
-
-  const before = [
-    [t, f, t],
-    [f, t, f],
-  ]
-  checkCells(cells, before)
-
-  expect(cells.toArray()).toEqual(before)
-})
