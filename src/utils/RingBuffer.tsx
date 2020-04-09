@@ -1,12 +1,22 @@
-export default class RingBuffer{
-  constructor(size) {
+interface itemWithGlobalIndex<T> {
+  globalIndex: number;
+  item: T;
+}
+
+export default class RingBuffer<T>{
+  _arr: T[]
+  _caret: number
+  _count: number
+  _basicGlobalIndex: number
+  
+  constructor(size: number) {
     this._arr = Array(size)
     this._caret = 0
     this._count = 0
     this._basicGlobalIndex = 0
   }
 
-  add(item) {
+  add(item: T) {
     if (this._count === 0) {
       this._arr[0] = item
       this._count = 1
@@ -26,10 +36,9 @@ export default class RingBuffer{
     this._count = this._countFromBasic(nextCaret)
   }
 
-  clone(cloneItem = x => x) {
+  clone(cloneItem: (x: T) => T = x => x): RingBuffer<T> {
     /* Not tested */
-    const res = new RingBuffer()
-    res._arr = Array(this._arr.length)
+    const res = new RingBuffer<T>(this._arr.length)
     for (let i = 0; i < res._arr.length; i++) {
       res._arr[i] = cloneItem(this._arr[i])
     }
@@ -39,11 +48,11 @@ export default class RingBuffer{
     return res
   }
 
-  getCapacity() {
+  getCapacity(): number {
     return this._arr.length
   }
 
-  setCaretByGlobalIndex(index) {
+  setCaretByGlobalIndex(index: number) {
     const min = this._basicGlobalIndex
     const max = min + this._count - 1
     if (index < min || index > max) {
@@ -52,25 +61,25 @@ export default class RingBuffer{
     this._caret = index % this.getCapacity()
   }
 
-  getCurrent() {
+  getCurrent(): T | null {
     return this._count > 0 ? this._arr[this._caret] : null
   }
 
-  getCurrentGlobalIndex() {
+  getCurrentGlobalIndex(): number {
     return this._count > 0 ?
       this._basicGlobalIndex + this._countFromBasic(this._caret) - 1 :
       -1
   }
 
-  getMinGlobalIndex() {
+  getMinGlobalIndex(): number {
     return this._basicGlobalIndex
   }
 
-  getMaxGlobalIndex() {
+  getMaxGlobalIndex(): number {
     return this._basicGlobalIndex + this._count - 1
   }
 
-  getListWithGlobalIndex() {
+  getListWithGlobalIndex(): itemWithGlobalIndex<T>[] {
     let res = []
     for (let i = 0; i < this._count; i++) {
       const globalIndex = this._basicGlobalIndex + i
@@ -82,15 +91,15 @@ export default class RingBuffer{
     return res
   }
 
-  _getBasicIndex() {
+  _getBasicIndex(): number {
     return this._basicGlobalIndex % this.getCapacity()
   }
 
-  _getNextIndex(index) {
+  _getNextIndex(index: number): number {
     return (index < this.getCapacity() - 1) ? index + 1: 0
   }
 
-  _countFromBasic(index) {
+  _countFromBasic(index: number): number {
     const basicIndex = this._getBasicIndex()
     return (basicIndex > index) ?
       (index + this.getCapacity()) - basicIndex + 1:
