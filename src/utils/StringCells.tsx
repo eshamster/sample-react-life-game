@@ -1,6 +1,6 @@
 import Cells from './Cells'
 
-type Direction = "left" | "right" | "top" | "bottom"
+export type Direction = "left" | "right" | "top" | "bottom"
 
 export default class StringCells {
   // Fill spaces by dead cells.

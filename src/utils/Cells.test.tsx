@@ -3,7 +3,7 @@ import Cells from './Cells'
 const t = true
 const f = false
 
-function checkCells(cells, cellsArray) {
+function checkCells(cells: Cells, cellsArray: boolean[][]) {
   const width = cellsArray[0].length
   const height = cellsArray.length
 
@@ -55,10 +55,10 @@ describe('getCellState/setCell', () => {
 
   test('out of range', () => {
     const cells = Cells.init(2, 3)
-    expect(() => cells.setCell(2, 0).toThrow('X should be in range'))
-    expect(() => cells.setCell(0, 3).toThrow('Y should be in range'))
-    expect(() => cells.getCellState(2, 0).toThrow('X should be in range'))
-    expect(() => cells.getCellState(0, 3).toThrow('Y should be in range'))
+    expect(() => cells.setCell(2, 0, true)).toThrow('X should be in range')
+    expect(() => cells.setCell(0, 3, true)).toThrow('Y should be in range')
+    expect(() => cells.getCellState(2, 0)).toThrow('X should be in range')
+    expect(() => cells.getCellState(0, 3)).toThrow('Y should be in range')
   })
 })
 
@@ -75,8 +75,8 @@ describe('setCellMod', () => {
 
   test('out of range', () => {
     const cells = Cells.init(2, 3)
-    expect(() => cells.setCellMod(2, 0).toThrow('X should be in range'))
-    expect(() => cells.setCellMod(0, 3).toThrow('Y should be in range'))
+    expect(() => cells.setCellMod(2, 0, true)).toThrow('X should be in range')
+    expect(() => cells.setCellMod(0, 3, true)).toThrow('Y should be in range')
   })
 })
 
@@ -111,8 +111,8 @@ describe('countAroundLivings', () => {
 
   test('out of range', () => {
     const cells = Cells.init(2, 3)
-    expect(() => cells.countAroundLivings(2, 0).toThrow('X should be in range'))
-    expect(() => cells.countAroundLivings(0, 3).toThrow('Y should be in range'))
+    expect(() => cells.countAroundLivings(2, 0)).toThrow('X should be in range')
+    expect(() => cells.countAroundLivings(0, 3)).toThrow('Y should be in range')
   })
 })
 
