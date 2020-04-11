@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import Board from './Board'
 import ControlPanel from './ControlPanel'
 import BoardSizePanel from './BoardSizePanel'
@@ -10,21 +10,36 @@ import Cells from '../utils/Cells'
 import ClipBoard from '../utils/ClipBoard'
 import RingBuffer from '../utils/RingBuffer'
 
-export default class Game extends React.Component {
-  constructor(props) {
+type GameProps = {
+}
+
+type Mode = "game" | "editor"
+
+type GameState = {
+  cellsBuffer: RingBuffer<Cells>;
+  isPlaying: boolean;
+  updateIntv: number;
+  intvId: number | null;
+  countsToBorn: number[],
+  countsToKeep: number[],
+  mode: Mode;
+}
+
+export default class Game extends React.Component<GameProps, GameState> {
+  constructor(props: GameProps) {
     super(props)
 
     const width = 30
     const height = 25
 
-    const cellsBuffer = new RingBuffer(100)
+    const cellsBuffer = new RingBuffer<Cells>(100)
     cellsBuffer.add(Cells.initRandomly(width, height))
 
     this.state = {
       cellsBuffer: cellsBuffer,
       isPlaying: false,
       updateIntv: 100, /* ms */
-      intvId: undefined,
+      intvId: null,
       countsToBorn: [3],
       countsToKeep: [2,3],
       mode: "game", // game, editor
@@ -33,7 +48,7 @@ export default class Game extends React.Component {
 
   // --- updating --- //
 
-  isLiveInNext(x, y, cells) {
+  isLiveInNext(x: number, y: number, cells: Cells) {
     const count = cells.countAroundLivings(x, y)
     const countsToLive =
           cells.getCellState(x, y) ?
@@ -66,18 +81,18 @@ export default class Game extends React.Component {
     }
     this.setState({
       isPlaying: true,
-      intvId: setInterval(() => this.update(), updateIntv)
+      intvId: window.setInterval(() => this.update(), updateIntv)
     })
   }
 
   stop() {
-    if (!this.isPlaying()) {
+    if (!this.isPlaying() || this.state.intvId === null) {
       return
     }
-    clearInterval(this.state.intvId)
+    window.clearInterval(this.state.intvId)
     this.setState({
       isPlaying: false,
-      intvId: undefined,
+      intvId: null,
     })
   }
 
@@ -93,7 +108,7 @@ export default class Game extends React.Component {
     }
   }
 
-  setUpdateInterval(value) {
+  setUpdateInterval(value: number) {
     this.setState({updateIntv: value})
     if (this.isPlaying()) {
       this.play(value)
@@ -102,7 +117,7 @@ export default class Game extends React.Component {
 
   // --- change cell state --- //
 
-  toggleOneCellState(x, y) {
+  toggleOneCellState(x: number, y: number) {
     const cells = this.getCells()
     const state = cells.getCellState(x, y)
     this.updateCells(cells.setCell(x, y, !state))
@@ -114,7 +129,7 @@ export default class Game extends React.Component {
 
   // --- set living conditions --- //
 
-  toggleNumberSelect(num, arr) {
+  toggleNumberSelect(num: number, arr: number[]) {
     if (num < 0 || num > 8) {
       throw new Error("Selection number should be [0, 8]")
     }
@@ -130,7 +145,7 @@ export default class Game extends React.Component {
 
   // --- cellSize --- //
 
-  updateCellSize(width, height) {
+  updateCellSize(width: number, height: number) {
     this.updateCells(this.getCells().cloneWithNewSize(width, height))
   }
 
@@ -142,7 +157,7 @@ export default class Game extends React.Component {
     ClipBoard.copy(textCells)
   }
 
-  cellsToText(cells) {
+  cellsToText(cells: Cells) {
     const width = cells.getWidth()
     const height = cells.getHeight()
 
@@ -195,7 +210,7 @@ export default class Game extends React.Component {
     this.setState({mode: "game"})
   }
 
-  submitEditor(cells) {
+  submitEditor(cells: Cells) {
     this.updateCells(cells)
     this.setState({mode: "game"})
   }
@@ -210,11 +225,15 @@ export default class Game extends React.Component {
     return cells.getHeight()
   }
 
-  getCells() {
-    return this.state.cellsBuffer.getCurrent()
+  getCells(): Cells {
+    const res = this.state.cellsBuffer.getCurrent()
+    if (res === null) {
+      throw new Error("getCells should not be null")
+    }
+    return res
   }
 
-  updateCells(cells) {
+  updateCells(cells: Cells) {
     // // Note: Probably cell level cloning is overdone.
     // const cellsBuffer = this.state.cellsBuffer.clone(
     //   cells => Cells.clone(cells)
@@ -232,7 +251,7 @@ export default class Game extends React.Component {
         <BoardSizePanel
           width={this.getWidth()}
           height={this.getHeight()}
-          onChange={(width, height) => this.updateCellSize(width, height)}
+          onChange={(width: number, height: number) => this.updateCellSize(width, height)}
         />
         <div className="board-panel">
           <Board
@@ -297,7 +316,7 @@ export default class Game extends React.Component {
           <Editor
             currentCells={this.getCells()}
             onClickCancel={() => this.cancelEditor()}
-            onClickSubmit={cells => this.submitEditor(cells)}
+            onClickSubmit={(cells: Cells) => this.submitEditor(cells)}
           />
         </div>
       )

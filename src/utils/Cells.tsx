@@ -1,5 +1,7 @@
 export default class Cells {
-  constructor(width, height) {
+  cells: boolean[][]
+
+  constructor(width: number, height: number) {
     const cells = Array(height)
     for (let y = 0; y < height; y++) {
       cells[y] = Array(width).fill(false)
@@ -8,11 +10,11 @@ export default class Cells {
   }
 
   // Create empty cells
-  static init(width, height) {
+  static init(width: number, height: number): Cells {
     return new Cells(width, height)
   }
 
-  static initRandomly(width, height) {
+  static initRandomly(width: number, height: number) {
     const cells = this.init(width, height)
     cells.forEach((x, y, _) => {
       cells.setCellMod(x, y, Math.random() > 0.5)
@@ -20,7 +22,7 @@ export default class Cells {
     return cells
   }
 
-  forEach(f) {
+  forEach(f: (x: number, y: number, value: boolean) => void) {
     const width = this.getWidth()
     const height = this.getHeight()
 
@@ -31,27 +33,27 @@ export default class Cells {
     }
   }
 
-  getCellState(x, y) {
+  getCellState(x: number, y: number): boolean {
     this._checkRange(x, y)
     return this.cells[y][x]
   }
 
   // Nondestructively set cell's state
-  setCell(x, y, state) {
+  setCell(x: number, y: number, state: boolean): Cells {
     const res = this.clone()
     res.setCellMod(x, y, state)
     return res
   }
 
   // Destructively set cell's state
-  setCellMod(x, y, state) {
+  setCellMod(x: number, y: number, state: boolean): void {
     this._checkRange(x, y)
     this.cells[y][x] = state ? true : false
   }
 
   // Count living cells around the specified cell.
   // A edge cell and its opposite cell is interpreted as adjacent.
-  countAroundLivings(x, y) {
+  countAroundLivings(x: number, y: number): number {
     const width = this.getWidth()
     const height = this.getHeight()
 
@@ -60,7 +62,7 @@ export default class Cells {
     const right = (x < width - 1) ? x + 1 : 0
     const down  = (y < height - 1) ? y + 1 : 0
 
-    const checkCell = (x, y) => {
+    const checkCell = (x: number, y: number) => {
       return this.getCellState(x, y) ? 1 : 0
     }
 
@@ -69,7 +71,7 @@ export default class Cells {
       checkCell(left, down) + checkCell(x, down) + checkCell(right, down)
   }
 
-  clone() {
+  clone(): Cells {
     const width = this.getWidth()
     const height = this.getHeight()
 
@@ -87,7 +89,7 @@ export default class Cells {
   // a new empty line is added to left (bottom).
   // If width (height) is lower than current,
   // left (bottom) line is removed.
-  cloneWithNewSize(width, height) {
+  cloneWithNewSize(width: number, height: number): Cells {
     if (width < 1) {
       width = 1
     }
@@ -114,15 +116,15 @@ export default class Cells {
     return res
   }
 
-  getWidth() {
+  getWidth(): number {
     return this.cells.length > 0 ? this.cells[0].length : 0
   }
 
-  getHeight() {
+  getHeight(): number {
     return this.cells.length
   }
 
-  _checkRange(x, y) {
+  _checkRange(x: number, y: number) {
     const width = this.getWidth()
     const height = this.getHeight()
 

@@ -1,6 +1,12 @@
-import React from 'react'
+import * as React from 'react'
 
-function NumButton(props) {
+type NumButtonProps = {
+  value: number;
+  isSelected: boolean;
+  onClick: () => void;
+}
+
+function NumButton(props: NumButtonProps) {
   return (
     <button
       className={props.isSelected ?
@@ -12,7 +18,13 @@ function NumButton(props) {
   )
 }
 
-export default function NumbersSelector(props) {
+type NumbersSelectorProps = {
+  maxNum: number;
+  selectedValues: number[];
+  onClickNum: (value: number) => void;
+}
+
+export default function NumbersSelector(props: NumbersSelectorProps) {
   const maxNum = props.maxNum
   const btns = Array(maxNum)
 

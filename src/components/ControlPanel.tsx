@@ -5,7 +5,17 @@ import ClearButton from './ClearButton'
 import ResetButton from './ResetButton'
 import IntervalChanger from './IntervalChanger'
 
-export default function ControlPanel(props) {
+type ControlPanelProps = {
+  isPlaying: boolean;
+  onClickPlay: () => void;
+  updateIntv: number;
+  onChangeInterval: (value: number) => void;
+  onClickStep: () => void;
+  onClickClear: () => void;
+  onClickReset: () => void;
+}
+
+export default function ControlPanel(props: ControlPanelProps) {
   return (
     <div className="control-panel">
       <div className="play-panel">
@@ -18,7 +28,7 @@ export default function ControlPanel(props) {
           min={50}
           max={1000}
           step={10}
-          onChange={value => props.onChangeInterval(value)}
+          onChange={(value: number) => props.onChangeInterval(value)}
         />
       </div>
       <div>

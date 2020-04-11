@@ -1,10 +1,24 @@
 import React from 'react'
 import './Editor.css'
 import DirButtons from './DirButtons'
+import Cells from '../../utils/Cells'
 import StrCells from '../../utils/StringCells'
+import {Direction} from '../../utils/StringCells'
 
-export default class Editor extends React.Component {
-  constructor(props) {
+type EditDirection = Direction | "all"
+
+type EditorParams = {
+  currentCells: Cells;
+  onClickSubmit: (cells: Cells) => void;
+  onClickCancel: () => void;
+}
+
+type EditorState = {
+  text: string;
+}
+
+export default class Editor extends React.Component<EditorParams, EditorState> {
+  constructor(props: EditorParams) {
     super(props)
 
     this.state = {
@@ -12,14 +26,14 @@ export default class Editor extends React.Component {
     }
   }
 
-  allDirs() {
+  allDirs(): Direction[] {
     return ["left", "right", "top", "bottom"]
   }
 
-  addLineMod(dir) {
+  addLineMod(dir: EditDirection) {
     if (dir === "all") {
       let res = this.state.text
-      this.allDirs().forEach(dir => {
+      this.allDirs().forEach((dir: Direction) => {
         res = StrCells.addLine(res, dir)
       })
       this.setState({text: res})
@@ -28,7 +42,7 @@ export default class Editor extends React.Component {
     }
   }
 
-  removeLineMod(dir) {
+  removeLineMod(dir: EditDirection) {
     if (dir === "all") {
       let res = this.state.text
       this.allDirs().forEach(dir => {

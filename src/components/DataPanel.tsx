@@ -1,6 +1,11 @@
-import React from 'react'
+import * as React from 'react'
 
-export default function DataPanel(props) {
+type DataPanelProps = {
+  onClickCopy: () => void;
+  onClickEdit: () => void;
+}
+
+export default function DataPanel(props: DataPanelProps) {
   return (
     <div className="data-panel">
       <button

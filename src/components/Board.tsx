@@ -1,7 +1,15 @@
-import React from 'react'
+import * as React from 'react'
 import Cell from './Cell'
+import Cells from '../utils/Cells'
 
-export default function Board(props) {
+type BoardProps = {
+  width: number;
+  height: number;
+  cellsState: Cells;
+  onClickCell: (x: number, y: number) => void;
+}
+
+export default function Board(props: BoardProps) {
   let cells = Array(props.height)
   const cellsState = props.cellsState
 

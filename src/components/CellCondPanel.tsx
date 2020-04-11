@@ -1,7 +1,14 @@
-import React from 'react'
+import * as React from 'react'
 import NumberSelector from './NumbersSelector'
 
-export default function CellCondPanel(props) {
+type CellCondPanelProps = {
+  countsToBorn: number[];
+  onClickBornNum: (n: number) => void;
+  countsToKeep: number[];
+  onClickKeepNum: (n: number) => void;
+}
+
+export default function CellCondPanel(props: CellCondPanelProps) {
   return (
     <ul className="ccp-ul">
       <li>
@@ -9,7 +16,7 @@ export default function CellCondPanel(props) {
         <NumberSelector
           maxNum={8}
           selectedValues={props.countsToBorn}
-          onClickNum={n => props.onClickBornNum(n)}
+          onClickNum={(n: number) => props.onClickBornNum(n)}
         />
       </li>
       <li>
@@ -17,7 +24,7 @@ export default function CellCondPanel(props) {
         <NumberSelector
           maxNum={8}
           selectedValues={props.countsToKeep}
-          onClickNum={n => props.onClickKeepNum(n)}
+          onClickNum={(n: number) => props.onClickKeepNum(n)}
         />
       </li>
     </ul>

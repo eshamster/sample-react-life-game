@@ -1,3 +1,4 @@
+import {Direction} from './StringCells'
 import StrCells from './StringCells'
 import Cells from './Cells'
 
@@ -37,19 +38,21 @@ describe('fillSpace', () => {
   })
 })
 
+interface addLineParams {
+  desc: string;
+  input: string;
+  dir: Direction;
+  expect: string;
+  expErrMsg?: string;
+}
+
 describe('addLine', () => {
-  const testTable = [
+  const testTable: addLineParams[] = [
     {
       desc: 'Empty string',
       input: '',
       dir: 'top',
       expect: '□',
-    },
-    {
-      desc: 'Error: Not recognized direction',
-      input: '□',
-      dir: 'not_a_direction',
-      expErrMsg: 'Not recognized direction',
     },
     {
       desc: 'Add to left',
@@ -80,7 +83,7 @@ describe('addLine', () => {
   testTable.forEach(tt => {
     test(tt.desc, () => {
       if (!tt.expErrMsg) {
-        expect(StrCells.addLine(tt.input, tt.dir)).toEqual(tt.expect)
+        expect(StrCells.addLine(tt.input, tt.dir as Direction)).toEqual(tt.expect)
       } else {
         expect(() => StrCells.addLine(tt.input, tt.dir)).toThrow(tt.expErrMsg)
       }
@@ -88,19 +91,21 @@ describe('addLine', () => {
   })
 })
 
+interface removeLineParams {
+  desc: string;
+  input: string;
+  dir: Direction;
+  expect: string;
+  expErrMsg?: string;
+}
+
 describe('removeLine', () => {
-  const testTable = [
+  const testTable: removeLineParams[] = [
     {
       desc: 'Empty string',
       input: '',
       dir: 'top',
       expect: '',
-    },
-    {
-      desc: 'Error: Not recognized direction',
-      input: '□',
-      dir: 'not_a_direction',
-      expErrMsg: 'Not recognized direction',
     },
     {
       desc: 'Remove from left',

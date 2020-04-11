@@ -1,6 +1,11 @@
 import React from 'react'
 
-export default function NumberSetter(props) {
+type NumberSetterProps = {
+  value: number;
+  onChange: (value: number) => void;
+}
+
+export default function NumberSetter(props: NumberSetterProps) {
   return (
     <input
       className="number-setter"

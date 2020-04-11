@@ -1,7 +1,9 @@
 export default class ClipBoard {
-  static copy(text) {
-    function listener(e) {
-      e.clipboardData.setData('text/plain', text);
+  static copy(text: string) {
+    function listener(e: ClipboardEvent) {
+      if (e.clipboardData !== null) {
+        e.clipboardData.setData('text/plain', text);
+      }
       e.preventDefault();
     }
 

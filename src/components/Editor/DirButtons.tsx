@@ -1,6 +1,19 @@
 import React from 'react'
 
-export default function DirButtons(props) {
+type DirButtonsParams = {
+  leftText: string;
+  rightText: string;
+  topText: string;
+  bottomText: string;
+  centerText: string;
+  onClickLeft: () => void;
+  onClickRight: () => void;
+  onClickTop: () => void;
+  onClickBottom: () => void;
+  onClickCenter: () => void;
+}
+
+export default function DirButtons(props: DirButtonsParams) {
   return (
     <div className="dir-buttons">
       <button

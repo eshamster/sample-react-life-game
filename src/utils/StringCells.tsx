@@ -1,5 +1,7 @@
 import Cells from './Cells'
 
+export type Direction = "left" | "right" | "top" | "bottom"
+
 export default class StringCells {
   // Fill spaces by dead cells.
   // And each characters are processed as the followings.
@@ -8,7 +10,7 @@ export default class StringCells {
   // - 0/space: Replaced by a white box
   // - 1: Replaced by a black box
   // - other characters: Removed
-  static fillSpace(str) {
+  static fillSpace(str: string): string {
     const formedStr = str
           .replace(/[^ 01■□\n]/g, "")
           .replace(/ /g, "□")
@@ -25,7 +27,7 @@ export default class StringCells {
     return filledArray.join("\n")
   }
   
-  static addLine(str, dir) {
+  static addLine(str: string, dir: Direction): string {
     if (str === "") {
       return "□"
     }
@@ -54,7 +56,7 @@ export default class StringCells {
     }
   }
 
-  static removeLine(str, dir) {
+  static removeLine(str: string, dir: Direction): string {
     switch (dir) {
     case "left": {
       const tmp = str
@@ -89,7 +91,7 @@ export default class StringCells {
     }
   }
 
-  static fromCells(cells) {
+  static fromCells(cells: Cells): string {
     const width = cells.getWidth()
     const height = cells.getHeight()
     const strMatrix = Array(height)
@@ -106,7 +108,7 @@ export default class StringCells {
       .join("\n")
   }
 
-  static toCells(str) {
+  static toCells(str: string): Cells {
     const formatted = this.fillSpace(str)
     if (formatted.length === 0) {
       return Cells.init(1, 1)
