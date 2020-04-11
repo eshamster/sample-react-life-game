@@ -1,6 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 
-export default function Cell(props) {
+type CellProps = {
+  isLive: boolean;
+  onClick: () => void;
+}
+
+export default function Cell(props: CellProps) {
   return (
     <button
       className={"cell " + (props.isLive ? "cell-live" : "cell-dead")}

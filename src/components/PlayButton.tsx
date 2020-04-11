@@ -1,6 +1,11 @@
-import React from 'react'
+import * as React from 'react'
 
-export default function PlayButton(props) {
+type PlayButtonProps = {
+  isPlaying: boolean;
+  onClick: () => void;
+}
+
+export default function PlayButton(props: PlayButtonProps) {
   return (
     <div className="play-btn-wrap">
       <button

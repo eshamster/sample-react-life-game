@@ -1,6 +1,14 @@
-import React from 'react'
+import * as React from 'react'
 
-export default function IntervalChanger(props) {
+type IntervalChangerProps = {
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  onChange: (value: number) => void;
+}
+
+export default function IntervalChanger(props: IntervalChangerProps) {
   return (
     <div className="interval-changer">
       <div>Update Interval: {props.value} [ms]</div>

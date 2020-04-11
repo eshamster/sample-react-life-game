@@ -1,7 +1,13 @@
+import * as React from 'react'
 
-import React from 'react'
+type HistoryPanelProps = {
+  minIndex: number;
+  maxIndex: number;
+  value: number;
+  onChange: (value: number) => void;
+}
 
-export default function HistoryPanel(props) {
+export default function HistoryPanel(props: HistoryPanelProps) {
   let opts = []
   for (let i = props.minIndex; i <= props.maxIndex; i++) {
     opts.push(
