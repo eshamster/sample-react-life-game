@@ -1,3 +1,8 @@
+![Node.js CI](https://github.com/eshamster/sample-react-life-game/workflows/Node.js%20CI/badge.svg?event=push)
+<a href="https://sample-react-life-game.now.sh/"><img src="https://badgen.net/badge/icon/zeit?icon=zeit&label"/></a>
+
+<a href="https://sample-react-life-game.now.sh/"><img src="https://raw.githubusercontent.com/eshamster/sample-react-life-game/master/public/favicon.ico"></a>
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
