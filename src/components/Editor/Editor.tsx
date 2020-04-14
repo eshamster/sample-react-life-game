@@ -1,9 +1,10 @@
 import React from 'react'
 import './Editor.css'
 import DirButtons from './DirButtons'
+import RotButtons from './RotButtons'
 import Cells from '../../utils/Cells'
 import StrCells from '../../utils/StringCells'
-import {Direction} from '../../utils/StringCells'
+import {Direction, RotDirection} from '../../utils/StringCells'
 
 type EditDirection = Direction | "all"
 
@@ -54,6 +55,10 @@ export default class Editor extends React.Component<EditorParams, EditorState> {
     }
   }
 
+  rotateMod(rDir: RotDirection) {
+    this.setState({text: StrCells.rotate(this.state.text, rDir)})
+  }
+
   render() {
     return (
       <div className="editor">
@@ -97,6 +102,12 @@ export default class Editor extends React.Component<EditorParams, EditorState> {
               onClickTop={() => this.removeLineMod("top")}
               bottomText="↑"
               onClickBottom={() => this.removeLineMod("bottom")}
+            />
+            <RotButtons
+              leftText="⟲"
+              onClickLeft={() => this.rotateMod("left")}
+              rightText="⟳"
+              onClickRight={() => this.rotateMod("right")}
             />
           </div>
         </div>

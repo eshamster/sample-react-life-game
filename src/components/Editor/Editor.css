@@ -15,7 +15,7 @@
 }
 
 .editor-edit-button{
-    margin-right: 5px;
+    margin-right: 8px;
 }
 
 .editor-control-panel {
@@ -32,7 +32,7 @@
 
 .dir-buttons {
     display: flex;
-    margin-right: 5px;
+    margin-right: 8px;
 }
 
 .dir-buttons-center {
@@ -47,4 +47,16 @@
 
 .dir-button-vert {
     text-align: center;
+}
+
+/* --- RotButtons --- */
+
+.rot-buttons {
+    display: flex;
+    margin-right: 8px;
+}
+
+.rot-button {
+    padding-left: 8px;
+    padding-right: 8px;
 }

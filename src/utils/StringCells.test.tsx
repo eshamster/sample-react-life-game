@@ -1,4 +1,4 @@
-import {Direction} from './StringCells'
+import { Direction, RotDirection } from './StringCells'
 import StrCells from './StringCells'
 import Cells from './Cells'
 
@@ -140,6 +140,42 @@ describe('removeLine', () => {
       } else {
         expect(() => StrCells.removeLine(tt.input, tt.dir)).toThrow(tt.expErrMsg)
       }
+    })
+  })
+})
+
+interface rotateParams {
+  desc: string;
+  input: string;
+  rDir: RotDirection;
+  expect: string;
+}
+
+describe('rotate', () => {
+  const testTable: rotateParams[] = [
+    {
+      desc: 'Empty string',
+      input: '',
+      rDir: 'left',
+      expect: '',
+    },
+    {
+      desc: 'Rotate to left',
+      input: '□■□\n■□■',
+      rDir: 'left',
+      expect: '□■\n■□\n□■',
+    },
+    {
+      desc: 'Rotate to right',
+      input: '□■□\n■□■',
+      rDir: 'right',
+      expect: '■□\n□■\n■□',
+    },
+  ]
+
+  testTable.forEach(tt => {
+    test(tt.desc, () => {
+      expect(StrCells.rotate(tt.input, tt.rDir)).toEqual(tt.expect)
     })
   })
 })

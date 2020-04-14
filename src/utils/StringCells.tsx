@@ -1,6 +1,7 @@
 import Cells from './Cells'
 
 export type Direction = "left" | "right" | "top" | "bottom"
+export type RotDirection = "left" | "right"
 
 export default class StringCells {
   // Fill spaces by dead cells.
@@ -58,37 +59,73 @@ export default class StringCells {
 
   static removeLine(str: string, dir: Direction): string {
     switch (dir) {
-    case "left": {
-      const tmp = str
-            .split("\n")
-            .map(str => str.replace(/^./, ""))
-            .join("\n")
-      return this.fillSpace(tmp)
+      case "left": {
+        const tmp = str
+          .split("\n")
+          .map(str => str.replace(/^./, ""))
+          .join("\n")
+        return this.fillSpace(tmp)
+      }
+      case "right": {
+        const tmp = str
+          .split("\n")
+          .map(str => str.replace(/.$/, ""))
+          .join("\n")
+        return this.fillSpace(tmp)
+      }
+      case "top":{
+        const tmp = str
+          .split("\n")
+          .slice(1)
+          .join("\n")
+        return this.fillSpace(tmp)
+      }
+      case "bottom": {
+        const tmp = str
+          .split("\n")
+          .slice(0, -1)
+          .join("\n")
+        return this.fillSpace(tmp)
+      }
+      default:
+        throw new Error(`Not recognized direction "${dir}"`)
     }
-    case "right": {
-      const tmp = str
-            .split("\n")
-            .map(str => str.replace(/.$/, ""))
-            .join("\n")
-      return this.fillSpace(tmp)
+  }
+
+  static rotate(str: string, rDir: RotDirection): string {
+    const strArr = this.fillSpace(str).split("\n")
+    if (strArr.length === 0) {
+      return ""
     }
-    case "top":{
-      const tmp = str
-            .split("\n")
-            .slice(1)
-            .join("\n")
-      return this.fillSpace(tmp)
+    const newWidth = strArr.length
+    const newHeight = strArr[0].length
+
+    const resArr: string[][] = Array(newHeight)
+    for (let y = 0; y < newHeight; y++) {
+      resArr[y] = Array(newWidth)
     }
-    case "bottom": {
-      const tmp = str
-            .split("\n")
-            .slice(0, -1)
-            .join("\n")
-      return this.fillSpace(tmp)
+
+    for (let y = 0; y < newHeight; y++) {
+      for (let x = 0; x < newWidth; x++) {
+        let preX = 0
+        let preY = 0
+        switch (rDir) {
+          case "left":
+            preX = newHeight - y - 1
+            preY = x
+            break
+          case "right":
+            preX = y
+            preY = newWidth - x - 1
+            break
+        }
+        resArr[y][x] = strArr[preY].charAt(preX)
+      }
     }
-    default:
-      throw new Error(`Not recognized direction "${dir}"`)
-    }
+
+    return resArr
+      .map(chars => chars.join(""))
+      .join("\n")
   }
 
   static fromCells(cells: Cells): string {
