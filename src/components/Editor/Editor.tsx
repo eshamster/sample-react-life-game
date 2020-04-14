@@ -113,7 +113,7 @@ export default class Editor extends React.Component<EditorParams, EditorState> {
         </div>
         <div className="editor-control-panel">
           <button
-            className="editor-control-button"
+            className="editor-control-button editor-submit-button"
             onClick={() => this.props.onClickSubmit(StrCells.toCells(this.state.text))}
           >
             Submit

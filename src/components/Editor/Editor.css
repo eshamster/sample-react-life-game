@@ -28,6 +28,11 @@
     margin-bottom: 5px;
 }
 
+.editor-submit-button {
+    font-size: 15px;
+    font-weight: bold;
+}
+
 /* --- DirButtons --- */
 
 .dir-buttons {

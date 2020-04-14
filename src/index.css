@@ -190,9 +190,12 @@ code {
     margin-left: 15px;
 }
 
-.data-panel-copy {
+.data-panel-edit {
     margin-bottom: 5px;
+    font-size: 15px;
+    font-weight: bold;
 }
 
-.data-panel-edit {
+.data-panel-copy {
+    margin-bottom: 5px;
 }
