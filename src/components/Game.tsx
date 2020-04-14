@@ -143,9 +143,9 @@ export default class Game extends React.Component<GameProps, GameState> {
     return res
   }
 
-  // --- cellSize --- //
+  // --- boardSize --- //
 
-  updateCellSize(width: number, height: number) {
+  updateBoardSize(width: number, height: number) {
     this.updateCells(this.getCells().cloneWithNewSize(width, height))
   }
 
@@ -251,7 +251,7 @@ export default class Game extends React.Component<GameProps, GameState> {
         <BoardSizePanel
           width={this.getWidth()}
           height={this.getHeight()}
-          onChange={(width: number, height: number) => this.updateCellSize(width, height)}
+          onChange={(width: number, height: number) => this.updateBoardSize(width, height)}
         />
         <div className="board-panel">
           <Board
