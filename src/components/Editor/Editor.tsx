@@ -1,5 +1,5 @@
 import React from 'react'
-import './Editor.css'
+import './Editor.scss'
 import DirButtons from './DirButtons'
 import RotButtons from './RotButtons'
 import Cells from '../../utils/Cells'
