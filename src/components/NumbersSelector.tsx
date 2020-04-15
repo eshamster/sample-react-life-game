@@ -10,8 +10,8 @@ function NumButton(props: NumButtonProps) {
   return (
     <button
       className={props.isSelected ?
-                 "ns-btn ns-btn-selected" :
-                 "ns-btn ns-btn-not-selected"}
+                 "numbers-selector__button--selected" :
+                 "numbers-selector__button--not-selected"}
       onClick={() => props.onClick()}>
       {props.value}
     </ button>
@@ -40,6 +40,6 @@ export default function NumbersSelector(props: NumbersSelectorProps) {
   }
   
   return (
-    <div className="ns">{btns}</div>
+    <div className="numbers-selector">{btns}</div>
   )
 }

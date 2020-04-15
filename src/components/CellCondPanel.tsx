@@ -10,7 +10,7 @@ type CellCondPanelProps = {
 
 export default function CellCondPanel(props: CellCondPanelProps) {
   return (
-    <ul className="ccp-ul">
+    <ul className="cell-cond-panel__ul">
       <li>
         BORN: Required around cells to born
         <NumberSelector

@@ -18,7 +18,7 @@ type ControlPanelProps = {
 export default function ControlPanel(props: ControlPanelProps) {
   return (
     <div className="control-panel">
-      <div className="play-panel">
+      <div className="control-panel__play-panel">
         <PlayButton
           isPlaying={props.isPlaying}
           onClick={() => props.onClickPlay()}

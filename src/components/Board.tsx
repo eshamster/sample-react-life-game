@@ -28,7 +28,7 @@ export default function Board(props: BoardProps) {
     cells[y] = (
       <div
         key={y}
-        className="board-row">
+        className="board__row">
         {row}
       </div>
     )

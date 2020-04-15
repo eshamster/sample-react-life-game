@@ -254,7 +254,7 @@ export default class Game extends React.Component<GameProps, GameState> {
           height={this.getHeight()}
           onChange={(width: number, height: number) => this.updateBoardSize(width, height)}
         />
-        <div className="board-panel">
+        <div className="game__board-panel">
           <Board
             width={this.getWidth()}
             height={this.getHeight()}
