@@ -1,8 +1,5 @@
 import React from 'react'
-import StepButton from './StepButton'
 import PlayButton from './PlayButton'
-import ClearButton from './ClearButton'
-import ResetButton from './ResetButton'
 import IntervalChanger from './IntervalChanger'
 
 type ControlPanelProps = {
@@ -32,15 +29,24 @@ export default function ControlPanel(props: ControlPanelProps) {
         />
       </div>
       <div>
-        <StepButton
+        <button
+          className="control-panel__step-button"
           onClick={() => props.onClickStep()}
-        />
-        <ClearButton
+        >
+          Next Step
+        </button>
+        <button
+          className="control-panel__clear-button"
           onClick={() => props.onClickClear()}
-        />
-        <ResetButton
+        >
+          Clear
+        </button>
+        <button
+          className="control-panel__reset-button"
           onClick={() => props.onClickReset()}
-        />
+        >
+          Reset
+        </button>
       </div>
     </div>
   )
