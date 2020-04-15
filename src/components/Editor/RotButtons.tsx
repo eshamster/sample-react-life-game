@@ -11,13 +11,13 @@ export default function DirButtons(props: RotButtonsParams) {
   return (
     <div className="rot-buttons">
       <button
-        className="rot-button"
+        className="rot-buttons__button"
         onClick={() => props.onClickLeft()}
       >
         {props.leftText}
       </button>
       <button
-        className="rot-button"
+        className="rot-buttons__button"
         onClick={() => props.onClickRight()}
       >
         {props.rightText}

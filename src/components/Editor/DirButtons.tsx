@@ -17,14 +17,14 @@ export default function DirButtons(props: DirButtonsParams) {
   return (
     <div className="dir-buttons">
       <button
-        className="dir-button-horiz"
+        className="dir-buttons__horiz"
         onClick={() => props.onClickLeft()}
       >
         {props.leftText}
       </button>
-      <div className="dir-buttons-center">
+      <div className="dir-buttons__center">
         <button
-          className="dir-button-vert"
+          className="dir-buttons__vert"
           onClick={() => props.onClickTop()}
         >
           {props.topText}
@@ -35,14 +35,14 @@ export default function DirButtons(props: DirButtonsParams) {
           {props.centerText}
         </button>
         <button
-          className="dir-button-vert"
+          className="dir-buttons__vert"
           onClick={() => props.onClickBottom()}
         >
           {props.bottomText}
         </button>
       </div>
       <button
-        className="dir-button-horiz"
+        className="dir-buttons__horiz"
         onClick={() => props.onClickRight()}
       >
         {props.rightText}
