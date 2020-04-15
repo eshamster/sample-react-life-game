@@ -8,7 +8,7 @@ type CellProps = {
 export default function Cell(props: CellProps) {
   return (
     <button
-      className={"cell " + (props.isLive ? "cell-live" : "cell-dead")}
+      className={(props.isLive ? "cell__live" : "cell__dead")}
       onClick={() => props.onClick()}
     >
     </button>

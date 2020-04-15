@@ -9,13 +9,13 @@ export default function DataPanel(props: DataPanelProps) {
   return (
     <div className="data-panel">
       <button
-        className="data-panel-edit"
+        className="data-panel__edit"
         onClick={() => props.onClickEdit()}
       >
         Edit
       </button>
       <button
-        className="data-panel-copy"
+        className="data-panel__copy"
         onClick={() => props.onClickCopy()}
       >
         Copy

@@ -1,5 +1,5 @@
 import React from 'react'
-import './Editor.css'
+import './Editor.scss'
 import DirButtons from './DirButtons'
 import RotButtons from './RotButtons'
 import Cells from '../../utils/Cells'
@@ -62,19 +62,19 @@ export default class Editor extends React.Component<EditorParams, EditorState> {
   render() {
     return (
       <div className="editor">
-        <div className="edit-area">
+        <div className="editor__edit-area">
           <textarea
             id="editor-input"
-            className="editor-input"
+            className="editor__input"
             rows={20}
             cols={80}
             onChange={e => this.setState({text: e.target.value})}
             value={this.state.text}
           >
           </textarea>
-          <div className="editor-edit-panel">
+          <div className="editor__edit-panel">
             <button
-              className="editor-edit-button"
+              className="editor__edit-button"
               onClick={() => this.setState({text: StrCells.fillSpace(this.state.text)})}
             >
               Fill Space
@@ -111,15 +111,15 @@ export default class Editor extends React.Component<EditorParams, EditorState> {
             />
           </div>
         </div>
-        <div className="editor-control-panel">
+        <div className="editor__control-panel">
           <button
-            className="editor-control-button editor-submit-button"
+            className="editor__control-button--submit"
             onClick={() => this.props.onClickSubmit(StrCells.toCells(this.state.text))}
           >
             Submit
           </button>
           <button
-            className="editor-control-button"
+            className="editor__control-button"
             onClick={() => this.props.onClickCancel()}
           >
             Cancel

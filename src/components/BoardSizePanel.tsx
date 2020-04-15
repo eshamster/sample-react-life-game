@@ -9,13 +9,13 @@ type BoardSizePanelProps = {
 
 export default function BoardSizePanel(props: BoardSizePanelProps) {
   return (
-    <div className="bsp">
-      <div className="bsp-text">width</div>
+    <div className="board-size-panel">
+      <div className="board-size-panel__text">width</div>
       <NumberSetter
         value={props.width}
         onChange={(value: number) => props.onChange(value, props.height)}
       />
-      <div className="bsp-text">height</div>
+      <div className="board-size-panel__text">height</div>
       <NumberSetter
         value={props.height}
         onChange={(value: number) => props.onChange(props.width, value)}

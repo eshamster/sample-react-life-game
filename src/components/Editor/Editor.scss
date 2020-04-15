@@ -1,0 +1,73 @@
+.editor {
+    display: flex;
+    margin-left: 5px;
+    margin-top: 5px;
+    align-items: flex-start;
+
+    &__input {
+        white-space: nowrap;
+        overflow: auto;
+    }
+
+    &__edit-panel{
+        display: flex;
+    }
+
+    &__edit-button{
+        margin-right: 8px;
+    }
+
+    &__control-panel {
+        display: flex;
+        flex-direction: column;
+        margin-left: 5px;
+    }
+
+    %__control-button {
+        margin-bottom: 5px;
+    }
+
+    &__control-button {
+        @extend %__control-button;
+
+        &--submit {
+            @extend %__control-button;
+            font-size: 15px;
+            font-weight: bold;
+        }
+    }
+
+}
+
+/* --- DirButtons --- */
+
+.dir-buttons {
+    display: flex;
+    margin-right: 8px;
+
+    &__center {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__horiz {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    &__vert {
+        text-align: center;
+    }
+}
+
+/* --- RotButtons --- */
+
+.rot-buttons {
+    display: flex;
+    margin-right: 8px;
+
+    &__button {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}
