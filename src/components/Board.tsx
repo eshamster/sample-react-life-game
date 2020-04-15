@@ -1,4 +1,5 @@
 import * as React from 'react'
+import './board.scss'
 import Cell from './Cell'
 import Cells from '../utils/Cells'
 

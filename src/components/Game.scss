@@ -8,41 +8,6 @@
     }
 }
 
-.board {
-    margin-top: 1px;
-    display: flex;
-    flex-direction: row;
-
-    &__row {
-        content: "";
-        display: table;
-        font-size: 0px;
-    }
-}
-
-%cell {
-    border: 1px solid #888;
-    margin-right: -1px;
-    margin-top: -1px;
-    margin-bottom: -1px;
-    padding: 0;
-    width: 15px;
-    height: 15px;
-    display: inline-block;
-}
-
-.cell {
-    &__live {
-        @extend %cell;
-        background: #000;
-    }
-
-    &__dead {
-        @extend %cell;
-        background: #fff;
-    }
-}
-
 .history-panel {
     width: 20px;
     margin-left: 10px;
