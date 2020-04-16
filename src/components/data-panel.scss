@@ -1,0 +1,15 @@
+.data-panel {
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+
+    &__edit {
+        margin-bottom: 5px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    &__copy {
+        margin-bottom: 5px;
+    }
+}

@@ -1,0 +1,14 @@
+.board-size-panel {
+    display: flex;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    &__text {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    &__number-setter {
+        width: 50px;
+    }
+}

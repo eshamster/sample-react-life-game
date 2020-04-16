@@ -1,4 +1,5 @@
 import * as React from 'react'
+import './board-size-panel.scss'
 import NumberSetter from './NumberSetter'
 
 type BoardSizePanelProps = {

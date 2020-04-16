@@ -1,4 +1,5 @@
 import * as React from 'react'
+import './cell-cond-panel.scss'
 import NumberSelector from './NumbersSelector'
 
 type CellCondPanelProps = {

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import './history-panel.scss'
 
 type HistoryPanelProps = {
   minIndex: number;

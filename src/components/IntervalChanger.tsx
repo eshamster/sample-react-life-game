@@ -1,4 +1,5 @@
 import * as React from 'react'
+import './interval-changer.scss'
 
 type IntervalChangerProps = {
   value: number;

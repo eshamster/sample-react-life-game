@@ -1,5 +1,5 @@
 import * as React from 'react'
-import './Game.scss'
+import './game.scss'
 import Board from './Board'
 import ControlPanel from './ControlPanel'
 import BoardSizePanel from './BoardSizePanel'

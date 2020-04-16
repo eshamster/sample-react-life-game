@@ -1,0 +1,32 @@
+.numbers-selector {
+    margin-left: 5px;
+
+    %__button {
+        border: 1px solid #888;
+        margin-right: -1px;
+        margin-top: -1px;
+        padding: 0;
+        width: 28px;
+        height: 28px;
+        text-align: center;
+    }
+
+    &__button {
+        @extend %__button;
+
+        &--selected {
+            @extend %__button;
+            background: #000;
+            font-weight: bold;
+            font-size:22px;
+            color: #fff;
+        }
+
+        &--not-selected {
+            @extend %__button;
+            background: #fff;
+            font-size: 18px;
+            color: #bbb;
+        }
+    }
+}

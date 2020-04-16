@@ -1,5 +1,5 @@
 import React from 'react'
-import PlayButton from './PlayButton'
+import './control-panel.scss'
 import IntervalChanger from './IntervalChanger'
 
 type ControlPanelProps = {
@@ -16,10 +16,14 @@ export default function ControlPanel(props: ControlPanelProps) {
   return (
     <div className="control-panel">
       <div className="control-panel__play-panel">
-        <PlayButton
-          isPlaying={props.isPlaying}
-          onClick={() => props.onClickPlay()}
-        />
+        <div className="control-panel__play-button">
+          <button
+            className={(props.isPlaying ?
+                        "control-panel__play-button--play" :
+                        "control-panel__play-button--stop")}
+            onClick={() => props.onClickPlay()}
+          />
+        </div>
         <IntervalChanger
           value={props.updateIntv}
           min={50}
