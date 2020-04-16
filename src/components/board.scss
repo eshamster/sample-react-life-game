@@ -26,9 +26,19 @@
             background: #000;
         }
 
+        &--live:hover {
+            @extend %__cell;
+            background: #060;
+        }
+
         &--dead {
             @extend %__cell;
             background: #fff;
+        }
+
+        &--dead:hover {
+            @extend %__cell;
+            background: #beb;
         }
     }
 }
