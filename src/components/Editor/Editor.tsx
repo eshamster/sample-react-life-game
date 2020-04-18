@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useReducer } from 'react'
 import './Editor.scss'
 import DirButtons from './DirButtons'
 import RotButtons from './RotButtons'
@@ -8,124 +8,139 @@ import {Direction, RotDirection} from '../../utils/StringCells'
 
 type EditDirection = Direction | "all"
 
-type EditorParams = {
+type EditorState = {
+  text: string;
+}
+
+type EditorProps = {
   currentCells: Cells;
   onClickSubmit: (cells: Cells) => void;
   onClickCancel: () => void;
 }
 
-type EditorState = {
-  text: string;
+type EditorAction =
+  | { type: "set", value: string }
+  | { type: "fillSpace" }
+  | { type: "addLine", dir: EditDirection }
+  | { type: "removeLine", dir: EditDirection }
+  | { type: "rotate", rDir: RotDirection }
+
+function reducer(state: EditorState, action: EditorAction) {
+  switch (action.type) {
+  case "set":
+    return { text: action.value }
+  case "fillSpace":
+    return { text: StrCells.fillSpace(state.text) }
+  case "addLine":
+    return { text: addLine(state.text, action.dir) }
+  case "removeLine":
+    return { text: removeLine(state.text, action.dir) }
+  case "rotate":
+    return { text: StrCells.rotate(state.text, action.rDir) }
+  default:
+    throw new Error(`Never reach`)
+  }
 }
 
-export default class Editor extends React.Component<EditorParams, EditorState> {
-  constructor(props: EditorParams) {
-    super(props)
+function allDirs(): Direction[] {
+  return ["left", "right", "top", "bottom"]
+}
 
-    this.state = {
-      text: StrCells.fromCells(props.currentCells),
-    }
+function addLine(text: string, dir: EditDirection) {
+  if (dir === "all") {
+    let res = text
+    allDirs().forEach((dir: Direction) => {
+      res = StrCells.addLine(res, dir)
+    })
+    return res
+  } else {
+    return StrCells.addLine(text, dir)
   }
+}
 
-  allDirs(): Direction[] {
-    return ["left", "right", "top", "bottom"]
+function removeLine(text: string, dir: EditDirection) {
+  if (dir === "all") {
+    let res = text
+    allDirs().forEach((dir: Direction) => {
+      res = StrCells.removeLine(res, dir)
+    })
+    return res
+  } else {
+    return StrCells.removeLine(text, dir)
   }
+}
 
-  addLineMod(dir: EditDirection) {
-    if (dir === "all") {
-      let res = this.state.text
-      this.allDirs().forEach((dir: Direction) => {
-        res = StrCells.addLine(res, dir)
-      })
-      this.setState({text: res})
-    } else {
-      this.setState({text: StrCells.addLine(this.state.text, dir)})
-    }
+export default function Editor(props: EditorProps) {
+  const initialState: EditorState = {
+    text: StrCells.fromCells(props.currentCells),
   }
+  const [state, dispatch] = useReducer(reducer, initialState)
 
-  removeLineMod(dir: EditDirection) {
-    if (dir === "all") {
-      let res = this.state.text
-      this.allDirs().forEach(dir => {
-        res = StrCells.removeLine(res, dir)
-      })
-      this.setState({text: res})
-    } else {
-      this.setState({text: StrCells.removeLine(this.state.text, dir)})
-    }
-  }
-
-  rotateMod(rDir: RotDirection) {
-    this.setState({text: StrCells.rotate(this.state.text, rDir)})
-  }
-
-  render() {
-    return (
-      <div className="editor">
-        <div className="editor__edit-area">
-          <textarea
-            id="editor-input"
-            className="editor__input"
-            rows={20}
-            cols={80}
-            onChange={e => this.setState({text: e.target.value})}
-            value={this.state.text}
-          >
-          </textarea>
-          <div className="editor__edit-panel">
-            <button
-              className="editor__edit-button"
-              onClick={() => this.setState({text: StrCells.fillSpace(this.state.text)})}
-            >
-              Fill Space
-            </button>
-            <DirButtons
-              centerText="Add"
-              onClickCenter={() => this.addLineMod("all")}
-              leftText="←"
-              onClickLeft={() => this.addLineMod("left")}
-              rightText="→"
-              onClickRight={() => this.addLineMod("right")}
-              topText="↑"
-              onClickTop={() => this.addLineMod("top")}
-              bottomText="↓"
-              onClickBottom={() => this.addLineMod("bottom")}
-            />
-            <DirButtons
-              centerText="Del"
-              onClickCenter={() => this.removeLineMod("all")}
-              leftText="→"
-              onClickLeft={() => this.removeLineMod("left")}
-              rightText="←"
-              onClickRight={() => this.removeLineMod("right")}
-              topText="↓"
-              onClickTop={() => this.removeLineMod("top")}
-              bottomText="↑"
-              onClickBottom={() => this.removeLineMod("bottom")}
-            />
-            <RotButtons
-              leftText="⟲"
-              onClickLeft={() => this.rotateMod("left")}
-              rightText="⟳"
-              onClickRight={() => this.rotateMod("right")}
-            />
-          </div>
-        </div>
-        <div className="editor__control-panel">
+  return (
+    <div className="editor">
+      <div className="editor__edit-area">
+        <textarea
+          id="editor-input"
+          className="editor__input"
+          rows={20}
+          cols={80}
+          onChange={e => dispatch({type: "set",value: e.target.value})}
+          value={state.text}
+        >
+        </textarea>
+        <div className="editor__edit-panel">
           <button
-            className="editor__control-button--submit"
-            onClick={() => this.props.onClickSubmit(StrCells.toCells(this.state.text))}
+            className="editor__edit-button"
+            onClick={() => dispatch({type: "fillSpace"})}
           >
-            Submit
+            Fill Space
           </button>
-          <button
-            className="editor__control-button"
-            onClick={() => this.props.onClickCancel()}
-          >
-            Cancel
-          </button>
+          <DirButtons
+            centerText="Add"
+            onClickCenter={() => dispatch({type: "addLine", dir: "all"})}
+            leftText="←"
+            onClickLeft={() => dispatch({type: "addLine", dir: "left"})}
+            rightText="→"
+            onClickRight={() => dispatch({type: "addLine", dir: "right"})}
+            topText="↑"
+            onClickTop={() => dispatch({type: "addLine", dir: "top"})}
+            bottomText="↓"
+            onClickBottom={() => dispatch({type: "addLine", dir: "bottom"})}
+          />
+          <DirButtons
+            centerText="Del"
+            onClickCenter={() => dispatch({type: "removeLine", dir: "all"})}
+            leftText="←"
+            onClickLeft={() => dispatch({type: "removeLine", dir: "left"})}
+            rightText="→"
+            onClickRight={() => dispatch({type: "removeLine", dir: "right"})}
+            topText="↑"
+            onClickTop={() => dispatch({type: "removeLine", dir: "top"})}
+            bottomText="↓"
+            onClickBottom={() => dispatch({type: "removeLine", dir: "bottom"})}
+          />
+          <RotButtons
+            leftText="⟲"
+            onClickLeft={() => dispatch({type: "rotate", rDir: "left"})}
+            rightText="⟳"
+            onClickRight={() => dispatch({type: "rotate", rDir: "right"})}
+          />
         </div>
       </div>
-    )
-  }
+      <div className="editor__control-panel">
+        <button
+          className="editor__control-button--submit"
+          onClick={() => props.onClickSubmit(StrCells.toCells(state.text))}
+        >
+          Submit
+        </button>
+        <button
+          className="editor__control-button"
+          onClick={() => props.onClickCancel()}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  )
 }
