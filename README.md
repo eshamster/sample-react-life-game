@@ -3,6 +3,10 @@
 
 <a href="https://sample-react-life-game.now.sh/"><img src="https://raw.githubusercontent.com/eshamster/sample-react-life-game/master/public/favicon.ico"></a>
 
+https://sample-react-life-game.now.sh
+
+-----
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
