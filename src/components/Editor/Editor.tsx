@@ -110,13 +110,13 @@ export default function Editor(props: EditorProps) {
           <DirButtons
             centerText="Del"
             onClickCenter={() => dispatch({type: "removeLine", dir: "all"})}
-            leftText="←"
+            leftText="→"
             onClickLeft={() => dispatch({type: "removeLine", dir: "left"})}
-            rightText="→"
+            rightText="←"
             onClickRight={() => dispatch({type: "removeLine", dir: "right"})}
-            topText="↑"
+            topText="↓"
             onClickTop={() => dispatch({type: "removeLine", dir: "top"})}
-            bottomText="↓"
+            bottomText="↑"
             onClickBottom={() => dispatch({type: "removeLine", dir: "bottom"})}
           />
           <RotButtons
